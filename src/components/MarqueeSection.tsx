@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { FadeIn } from './Reusable/FadeIn';
-import { ExternalLink, Code, BarChart3, Flame, CheckCircle, CalendarDays } from 'lucide-react';
+import { ExternalLink, Code, BarChart3, Flame, CheckCircle, CalendarDays, Zap } from 'lucide-react';
 
 interface DayData {
   day: number;
@@ -14,6 +14,8 @@ const LeetCodeCalendar: React.FC = () => {
   const [calendar, setCalendar] = useState<DayData[]>([]);
   const [streak, setStreak] = useState(0);
   const [totalActive, setTotalActive] = useState(0);
+  const [lastActiveDay, setLastActiveDay] = useState<string>('');
+  const [submittedToday, setSubmittedToday] = useState(false);
   const [loading, setLoading] = useState(true);
 
   const now = new Date();
@@ -49,12 +51,23 @@ const LeetCodeCalendar: React.FC = () => {
         const firstDay = new Date(year, month, 1);
         const lastDay = new Date(year, month + 1, 0);
 
+        let lastTs = 0;
         for (let d = new Date(firstDay); d <= lastDay; d.setDate(d.getDate() + 1)) {
           const ts = Math.floor(d.getTime() / 1000);
           const key = String(ts);
-          days.push({ day: d.getDate(), count: raw[key] || 0 });
+          const count = raw[key] || 0;
+          days.push({ day: d.getDate(), count });
+          if (count > 0 && ts > lastTs) lastTs = ts;
         }
         setCalendar(days);
+
+        if (lastTs > 0) {
+          const d = new Date(lastTs * 1000);
+          setLastActiveDay(d.toLocaleDateString('en-US', { month: 'short', day: 'numeric' }));
+        }
+
+        const todayTs = Math.floor(now.getTime() / 1000);
+        setSubmittedToday((raw[String(todayTs)] || 0) > 0);
       } catch {
         // fallback
       }
@@ -86,14 +99,23 @@ const LeetCodeCalendar: React.FC = () => {
       ) : (
         <>
           {/* Stats Row */}
-          <div className="flex gap-4 mb-5">
+          <div className="flex gap-2 mb-5 flex-wrap">
             <div className="flex items-center gap-1.5 bg-[#D7E2EA]/5 rounded-lg px-3 py-2">
               <Flame className="w-4 h-4 text-[#BE4C00]" />
               <span className="text-xs text-[#D7E2EA]">{streak}<span className="text-[#D7E2EA]/50 ml-1">day streak</span></span>
+              {lastActiveDay && (
+                <span className="text-[10px] text-[#D7E2EA]/40 ml-1">· last {lastActiveDay}</span>
+              )}
             </div>
             <div className="flex items-center gap-1.5 bg-[#D7E2EA]/5 rounded-lg px-3 py-2">
               <CheckCircle className="w-4 h-4 text-[#B600A8]" />
               <span className="text-xs text-[#D7E2EA]">{totalActive}<span className="text-[#D7E2EA]/50 ml-1">active days</span></span>
+            </div>
+            <div className={`flex items-center gap-1.5 rounded-lg px-3 py-2 ${submittedToday ? 'bg-green-500/10' : 'bg-[#D7E2EA]/5'}`}>
+              <Zap className={`w-4 h-4 ${submittedToday ? 'text-green-400' : 'text-[#D7E2EA]/30'}`} />
+              <span className={`text-xs ${submittedToday ? 'text-green-400' : 'text-[#D7E2EA]/30'}`}>
+                {submittedToday ? 'Solved today!' : 'Not yet today'}
+              </span>
             </div>
           </div>
 
@@ -152,8 +174,7 @@ export const MarqueeSection: React.FC = () => {
           {/* GitHub Card */}
           <FadeIn delay={0.2} y={20} className="w-full lg:w-1/2">
             <div className="relative group h-full">
-              <div className="absolute -inset-1 bg-gradient-to-r from-[#B600A8] to-[#7621B0] rounded-2xl opacity-20 group-hover:opacity-40 blur transition-all duration-500" />
-              <div className="relative bg-[#0C0C0C] border border-[#D7E2EA]/10 rounded-2xl p-6 sm:p-8 h-full flex flex-col">
+              <div className="relative bg-gradient-to-br from-[#B600A8]/10 via-[#0C0C0C] to-[#7621B0]/10 border border-[#D7E2EA]/10 rounded-2xl p-6 sm:p-8 h-full flex flex-col">
                 <div className="flex items-center gap-3 mb-6">
                   <div className="w-10 h-10 rounded-lg bg-[#D7E2EA]/10 flex items-center justify-center">
                     <Code className="w-5 h-5 text-[#D7E2EA]" />
@@ -186,15 +207,14 @@ export const MarqueeSection: React.FC = () => {
           {/* LeetCode Card */}
           <FadeIn delay={0.3} y={20} className="w-full lg:w-1/2">
             <div className="relative group h-full">
-              <div className="absolute -inset-1 bg-gradient-to-r from-[#BE4C00] to-[#B600A8] rounded-2xl opacity-20 group-hover:opacity-40 blur transition-all duration-500" />
-              <div className="relative bg-[#0C0C0C] border border-[#D7E2EA]/10 rounded-2xl p-6 sm:p-8 h-full flex flex-col">
+              <div className="relative bg-gradient-to-br from-[#BE4C00]/10 via-[#0C0C0C] to-[#B600A8]/10 border border-[#D7E2EA]/10 rounded-2xl p-6 sm:p-8 h-full flex flex-col">
                 <div className="flex items-center gap-3 mb-6">
                   <div className="w-10 h-10 rounded-lg bg-[#D7E2EA]/10 flex items-center justify-center">
                     <BarChart3 className="w-5 h-5 text-[#D7E2EA]" />
                   </div>
                   <div>
                     <h3 className="text-lg font-semibold text-[#D7E2EA] uppercase tracking-wide">LeetCode</h3>
-                    <a href="https://leetcode.com/SakshamDevloper" target="_blank" rel="noopener noreferrer" className="text-xs text-[#D7E2EA]/50 hover:text-[#B600A8] transition-colors flex items-center gap-1">
+                    <a href="https://leetcode.com/SakshamDevloper" target="_blank" rel="noopener noreferrer" className="text-xs text-[#D7E2EA]/50 hover:text-[#BE4C00] transition-colors flex items-center gap-1">
                       @SakshamDevloper <ExternalLink className="w-3 h-3" />
                     </a>
                   </div>
