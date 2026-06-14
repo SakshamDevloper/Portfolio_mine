@@ -1,6 +1,6 @@
 import React from 'react';
 import { FadeIn } from './Reusable/FadeIn';
-import { ExternalLink, Code, BarChart3 } from 'lucide-react';
+import { ExternalLink, Code, BarChart3, Linkedin, Users, Award, MapPin } from 'lucide-react';
 import { LeetCodeCalendar } from './LeetCode/LeetCodeCalendar';
 
 export const MarqueeSection: React.FC = () => {
@@ -18,9 +18,9 @@ export const MarqueeSection: React.FC = () => {
           </h2>
         </FadeIn>
 
-        <div className="flex flex-col lg:flex-row gap-8 lg:gap-10 items-center lg:items-stretch justify-center">
+          <div className="flex flex-col lg:flex-row gap-8 lg:gap-6 items-center lg:items-stretch justify-center">
           {/* GitHub Card */}
-          <FadeIn delay={0.2} y={20} className="w-full lg:w-1/2">
+          <FadeIn delay={0.2} y={20} className="w-full lg:w-1/3">
             <div className="relative group h-full">
               <div className="absolute -inset-1 bg-gradient-to-r from-[#B600A8] to-[#7621B0] rounded-2xl opacity-20 group-hover:opacity-40 blur transition-all duration-500" />
               <div className="relative bg-[#0C0C0C] border border-[#D7E2EA]/10 rounded-2xl p-6 sm:p-8 h-full flex flex-col">
@@ -59,8 +59,66 @@ export const MarqueeSection: React.FC = () => {
             </div>
           </FadeIn>
 
+          {/* LinkedIn Card */}
+          <FadeIn delay={0.25} y={20} className="w-full lg:w-1/3">
+            <div className="relative group h-full">
+              <div className="absolute -inset-1 bg-gradient-to-r from-[#0A66C2] to-[#0077B5] rounded-2xl opacity-20 group-hover:opacity-40 blur transition-all duration-500" />
+              <div className="relative bg-[#0C0C0C] border border-[#D7E2EA]/10 rounded-2xl p-6 sm:p-8 h-full flex flex-col">
+                <div className="flex items-center gap-3 mb-6">
+                  <div className="w-10 h-10 rounded-lg bg-[#0A66C2]/20 flex items-center justify-center">
+                    <Linkedin className="w-5 h-5 text-[#0A66C2]" />
+                  </div>
+                  <div>
+                    <h3 className="text-lg font-semibold text-[#D7E2EA] uppercase tracking-wide">LinkedIn</h3>
+                    <a href="https://www.linkedin.com/in/SakshamDevloper" target="_blank" rel="noopener noreferrer" className="text-xs text-[#D7E2EA]/50 hover:text-[#0A66C2] transition-colors flex items-center gap-1">
+                      @SakshamDevloper <ExternalLink className="w-3 h-3" />
+                    </a>
+                  </div>
+                </div>
+                <div className="flex-1 flex flex-col items-center justify-center text-center gap-5">
+                  {/* Avatar */}
+                  <div className="w-20 h-20 rounded-full bg-gradient-to-br from-[#0A66C2] to-[#0077B5] p-0.5">
+                    <div className="w-full h-full rounded-full bg-[#0C0C0C] flex items-center justify-center">
+                      <span className="text-2xl font-bold text-[#D7E2EA]">S</span>
+                    </div>
+                  </div>
+                  {/* Name & Headline */}
+                  <div>
+                    <h4 className="text-base font-semibold text-[#D7E2EA]">Saksham Sethi</h4>
+                    <p className="text-xs text-[#D7E2EA]/60 mt-1 max-w-[220px] mx-auto leading-relaxed">
+                      AI/ML Engineer & Full-Stack Developer | GenAI, LangChain, RAG
+                    </p>
+                  </div>
+                  {/* Stats */}
+                  <div className="flex gap-6">
+                    <div className="flex flex-col items-center">
+                      <Users className="w-4 h-4 text-[#0A66C2] mb-1" />
+                      <span className="text-sm font-semibold text-[#D7E2EA]">500+</span>
+                      <span className="text-[9px] text-[#D7E2EA]/40 uppercase tracking-wider">connections</span>
+                    </div>
+                    <div className="flex flex-col items-center">
+                      <MapPin className="w-4 h-4 text-[#0A66C2] mb-1" />
+                      <span className="text-sm font-semibold text-[#D7E2EA]">Jammu</span>
+                      <span className="text-[9px] text-[#D7E2EA]/40 uppercase tracking-wider">India</span>
+                    </div>
+                  </div>
+                  {/* View Profile Button */}
+                  <a
+                    href="https://www.linkedin.com/in/SakshamDevloper"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-2 bg-[#0A66C2] hover:bg-[#004182] text-white text-xs font-medium px-6 py-2.5 rounded-full transition-all duration-300 hover:scale-105 hover:shadow-[0_0_20px_rgba(10,102,194,0.4)]"
+                  >
+                    <Linkedin className="w-4 h-4" />
+                    View Profile
+                  </a>
+                </div>
+              </div>
+            </div>
+          </FadeIn>
+
           {/* LeetCode Card */}
-          <FadeIn delay={0.3} y={20} className="w-full lg:w-1/2">
+          <FadeIn delay={0.3} y={20} className="w-full lg:w-1/3">
             <div className="relative group h-full">
               <div className="absolute -inset-1 bg-gradient-to-r from-[#BE4C00] to-[#B600A8] rounded-2xl opacity-20 group-hover:opacity-40 blur transition-all duration-500" />
               <div className="relative bg-[#0C0C0C] border border-[#D7E2EA]/10 rounded-2xl p-6 sm:p-8 h-full flex flex-col">
