@@ -1,6 +1,6 @@
 import React from 'react';
 import { FadeIn } from './Reusable/FadeIn';
-import { ExternalLink, Code, BarChart3, Linkedin, Users, Award, MapPin } from 'lucide-react';
+import { ExternalLink, Code, BarChart3, Linkedin, Users, MapPin } from 'lucide-react';
 import { LeetCodeCalendar } from './LeetCode/LeetCodeCalendar';
 
 export const MarqueeSection: React.FC = () => {
