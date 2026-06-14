@@ -6,10 +6,8 @@ import type { DayData, MonthData } from '../../types/leetcode';
 const MONTHS = ['January','February','March','April','May','June','July','August','September','October','November','December'];
 const DAYS_SHORT = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
 
-const now = new Date();
-const CURRENT_YEAR = now.getFullYear();
-const CURRENT_MONTH = now.getMonth();
-const TODAY = now.getDate();
+const CURRENT_YEAR = new Date().getFullYear();
+const CURRENT_MONTH = new Date().getMonth();
 
 function buildMonthData(
   year: number,
@@ -17,19 +15,21 @@ function buildMonthData(
   raw: Record<string, number> | null
 ): MonthData {
   const days: DayData[] = [];
-  const firstDay = new Date(year, month, 1);
-  const lastDay = new Date(year, month + 1, 0);
-  const daysInMonth = lastDay.getDate();
+  const daysInMonth = new Date(Date.UTC(year, month + 1, 0)).getUTCDate();
 
   let totalSubmissions = 0;
   let activeDays = 0;
 
   for (let d = 1; d <= daysInMonth; d++) {
-    const date = new Date(year, month, d);
+    const date = new Date(Date.UTC(year, month, d));
     const ts = Math.floor(date.getTime() / 1000);
     const count = raw?.[String(ts)] ?? 0;
-    const isFuture = date > now;
-    const isToday = year === CURRENT_YEAR && month === CURRENT_MONTH && d === TODAY;
+    const now = new Date();
+    const isFuture = date.getTime() > now.getTime();
+    const isToday =
+      date.getUTCFullYear() === now.getUTCFullYear() &&
+      date.getUTCMonth() === now.getUTCMonth() &&
+      date.getUTCDate() === now.getUTCDate();
 
     days.push({ day: d, count, date, isFuture, isToday });
     if (!isFuture) {
@@ -203,7 +203,7 @@ export const LeetCodeCalendar: React.FC = () => {
               {d[0]}
             </div>
           ))}
-          {Array.from({ length: new Date(calendar.year, calendar.month, 1).getDay() }).map((_, i) => (
+          {Array.from({ length: new Date(Date.UTC(calendar.year, calendar.month, 1)).getUTCDay() }).map((_, i) => (
             <div key={`empty-${i}`} />
           ))}
           {calendar.days.map((d, i) => {
