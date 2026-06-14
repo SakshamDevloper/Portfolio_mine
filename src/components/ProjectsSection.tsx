@@ -87,8 +87,12 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, index, totalCards })
         }}
         onMouseMove={handleMouseMove}
         onMouseLeave={handleMouseLeave}
-        className="sticky w-full rounded-[40px] sm:rounded-[50px] md:rounded-[60px] border-2 border-[#D7E2EA] bg-[#0C0C0C] p-4 sm:p-6 md:p-8 flex flex-col justify-between overflow-hidden shadow-2xl"
+        className="sticky group w-full rounded-[40px] sm:rounded-[50px] md:rounded-[60px] bg-[#0C0C0C] p-4 sm:p-6 md:p-8 flex flex-col justify-between overflow-hidden shadow-2xl"
       >
+        {/* Glow border */}
+        <div className="absolute -inset-[2px] bg-gradient-to-r from-[#B600A8] via-[#7621B0] to-[#BE4C00] rounded-[40px] sm:rounded-[50px] md:rounded-[60px] opacity-15 group-hover:opacity-30 blur-sm transition-all duration-500 pointer-events-none" />
+        <div className="absolute inset-0 rounded-[40px] sm:rounded-[50px] md:rounded-[60px] bg-[#0C0C0C] pointer-events-none" />
+        <div className="relative z-10 flex flex-col justify-between h-full">
         {/* Top Row: Number, Details, Live Button */}
         <div className="flex justify-between items-center w-full mb-6 sm:mb-8 md:mb-10">
           <div className="flex items-center">
@@ -145,6 +149,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, index, totalCards })
               className="w-full h-full object-cover rounded-[40px] sm:rounded-[50px] md:rounded-[60px] select-none transition-transform duration-500 group-hover:scale-110"
               loading="lazy"
             />
+          </div>
           </div>
         </div>
       </motion.div>
