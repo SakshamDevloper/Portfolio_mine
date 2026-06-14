@@ -1,0 +1,5 @@
+[[redirects]]
+  from = "/api/leetcode"
+  to = "https://leetcode.com/graphql"
+  status = 200
+  force = true
