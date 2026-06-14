@@ -174,7 +174,8 @@ export const MarqueeSection: React.FC = () => {
           {/* GitHub Card */}
           <FadeIn delay={0.2} y={20} className="w-full lg:w-1/2">
             <div className="relative group h-full">
-              <div className="relative bg-gradient-to-br from-[#B600A8]/10 via-[#0C0C0C] to-[#7621B0]/10 border border-[#D7E2EA]/10 rounded-2xl p-6 sm:p-8 h-full flex flex-col">
+              <div className="absolute -inset-1 bg-gradient-to-r from-[#B600A8] to-[#7621B0] rounded-2xl opacity-20 group-hover:opacity-40 blur transition-all duration-500" />
+              <div className="relative bg-[#0C0C0C] border border-[#D7E2EA]/10 rounded-2xl p-6 sm:p-8 h-full flex flex-col">
                 <div className="flex items-center gap-3 mb-6">
                   <div className="w-10 h-10 rounded-lg bg-[#D7E2EA]/10 flex items-center justify-center">
                     <Code className="w-5 h-5 text-[#D7E2EA]" />
@@ -207,7 +208,8 @@ export const MarqueeSection: React.FC = () => {
           {/* LeetCode Card */}
           <FadeIn delay={0.3} y={20} className="w-full lg:w-1/2">
             <div className="relative group h-full">
-              <div className="relative bg-gradient-to-br from-[#BE4C00]/10 via-[#0C0C0C] to-[#B600A8]/10 border border-[#D7E2EA]/10 rounded-2xl p-6 sm:p-8 h-full flex flex-col">
+              <div className="absolute -inset-1 bg-gradient-to-r from-[#BE4C00] to-[#B600A8] rounded-2xl opacity-20 group-hover:opacity-40 blur transition-all duration-500" />
+              <div className="relative bg-[#0C0C0C] border border-[#D7E2EA]/10 rounded-2xl p-6 sm:p-8 h-full flex flex-col">
                 <div className="flex items-center gap-3 mb-6">
                   <div className="w-10 h-10 rounded-lg bg-[#D7E2EA]/10 flex items-center justify-center">
                     <BarChart3 className="w-5 h-5 text-[#D7E2EA]" />
