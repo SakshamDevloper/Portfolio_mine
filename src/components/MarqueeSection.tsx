@@ -18,7 +18,7 @@ export const MarqueeSection: React.FC = () => {
           </h2>
         </FadeIn>
 
-          <div className="flex flex-col lg:flex-row gap-8 lg:gap-6 items-center lg:items-stretch justify-center">
+          <div className="flex flex-col lg:flex-row gap-8 lg:gap-10 items-center lg:items-stretch justify-center">
           {/* GitHub Card */}
           <FadeIn delay={0.2} y={20} className="w-full lg:w-1/3">
             <div className="relative group h-full">
