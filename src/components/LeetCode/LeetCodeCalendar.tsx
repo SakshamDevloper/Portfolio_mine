@@ -212,7 +212,7 @@ export const LeetCodeCalendar: React.FC = () => {
                   key={i}
                   className="aspect-square rounded-md flex items-center justify-center text-[10px] sm:text-[11px] font-medium bg-[#1a1a1a]/50 text-[#D7E2EA]/10 cursor-default"
                 >
-                  {d.day}
+                {d.count > 0 ? d.count : ''}
                 </div>
               );
             }
@@ -222,7 +222,7 @@ export const LeetCodeCalendar: React.FC = () => {
                 className={`aspect-square rounded-md flex items-center justify-center text-[10px] sm:text-[11px] font-medium transition-all duration-300 cursor-default hover:scale-110 hover:z-10 ${getGlowClass(d.count, maxCount)} ${d.isToday ? 'ring-2 ring-white/40 animate-pulse' : ''}`}
                 title={`${d.date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })} — ${d.count} submission${d.count !== 1 ? 's' : ''}`}
               >
-                {d.day}
+                {d.count > 0 ? d.count : ''}
               </div>
             );
           })}
