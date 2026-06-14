@@ -8,7 +8,7 @@ export const MarqueeSection: React.FC = () => {
     <section className="bg-[#0C0C0C] pt-24 sm:pt-32 md:pt-40 pb-16 sm:pb-20 md:pb-24 w-full relative overflow-hidden">
       <div className="absolute inset-0 bg-gradient-to-b from-[#B600A8]/5 via-transparent to-[#BE4C00]/5 pointer-events-none" />
 
-      <div className="max-w-7xl mx-auto px-5 sm:px-8 md:px-10 relative z-10">
+      <div className="max-w-[1600px] mx-auto px-5 sm:px-8 md:px-10 relative z-10">
         <FadeIn delay={0.1} y={20} className="mb-10 sm:mb-14 md:mb-16 text-center">
           <span className="text-xs sm:text-sm uppercase tracking-widest text-[#D7E2EA]/60 font-light select-none">
             Coding Profiles
