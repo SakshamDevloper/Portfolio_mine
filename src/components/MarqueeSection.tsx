@@ -75,7 +75,7 @@ const LeetCodeCalendar: React.FC = () => {
           const d = new Date(now);
           d.setDate(d.getDate() - i);
           const ts = Math.floor(d.getTime() / 1000);
-          if ((raw[String(ts)] || 0) > 0) activeCount++;
+          activeCount += raw[String(ts)] || 0;
         }
         setLast14Active(activeCount);
       } catch {
@@ -129,7 +129,7 @@ const LeetCodeCalendar: React.FC = () => {
             </div>
             <div className="flex items-center gap-1.5 bg-green-500/10 rounded-lg px-3 py-2">
               <Flame className="w-4 h-4 text-green-400" />
-              <span className="text-xs text-green-400">{last14Active}<span className="text-green-400/50 ml-1">/14 days active</span></span>
+              <span className="text-xs text-green-400">{last14Active}<span className="text-green-400/50 ml-1">submissions (14d)</span></span>
             </div>
           </div>
 
