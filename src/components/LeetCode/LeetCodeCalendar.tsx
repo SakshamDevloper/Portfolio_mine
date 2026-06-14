@@ -61,6 +61,7 @@ function getGlowClass(count: number, maxCount: number): string {
 export const LeetCodeCalendar: React.FC = () => {
   const [selectedMonth, setSelectedMonth] = useState(CURRENT_MONTH);
   const [selectedYear] = useState(CURRENT_YEAR);
+  const [selectedDay, setSelectedDay] = useState<DayData | null>(null);
 
   const canGoPrev = selectedMonth > 0 || selectedYear > CURRENT_YEAR - 1;
   const canGoNext = selectedMonth < CURRENT_MONTH && selectedYear === CURRENT_YEAR;
@@ -219,8 +220,9 @@ export const LeetCodeCalendar: React.FC = () => {
             return (
               <div
                 key={i}
-                className={`aspect-square rounded-md flex items-center justify-center text-[10px] sm:text-[11px] font-medium transition-all duration-300 cursor-default hover:scale-110 hover:z-10 ${getGlowClass(d.count, maxCount)} ${d.isToday ? 'ring-2 ring-white/40 animate-pulse' : ''}`}
+                className={`aspect-square rounded-md flex items-center justify-center text-[10px] sm:text-[11px] font-medium transition-all duration-300 cursor-pointer hover:scale-110 hover:z-10 ${getGlowClass(d.count, maxCount)} ${d.isToday ? 'ring-2 ring-white/40 animate-pulse' : ''} ${selectedDay?.day === d.day ? 'ring-2 ring-green-400' : ''}`}
                 title={`${d.date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })} — ${d.count} submission${d.count !== 1 ? 's' : ''}`}
+                onClick={() => setSelectedDay(d)}
               >
                 {d.day}
               </div>
@@ -238,6 +240,22 @@ export const LeetCodeCalendar: React.FC = () => {
           <div className="w-3 h-3 rounded-sm bg-green-600/20 shadow-[0_0_6px_rgba(74,222,128,0.5)] ring-1 ring-green-400/30" />
           <div className="w-3 h-3 rounded-sm bg-green-400/20 shadow-[0_0_8px_rgba(74,222,128,0.7)] ring-2 ring-green-400/40" />
           <span className="text-[9px] sm:text-[10px] text-[#D7E2EA]/40">More</span>
+        </div>
+      )}
+
+      {/* Selected Day Info */}
+      {selectedDay && (
+        <div className="mt-3 flex items-center justify-between bg-[#D7E2EA]/5 rounded-lg px-4 py-2.5 border border-[#D7E2EA]/10 cursor-pointer" onClick={() => setSelectedDay(null)}>
+          <span className="text-xs text-[#D7E2EA]/70">
+            {selectedDay.date.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric', year: 'numeric' })}
+          </span>
+          <span className="text-xs font-medium">
+            {selectedDay.count > 0 ? (
+              <span className="text-green-400">{selectedDay.count} submission{selectedDay.count !== 1 ? 's' : ''}</span>
+            ) : (
+              <span className="text-[#D7E2EA]/30">No submissions</span>
+            )}
+          </span>
         </div>
       )}
     </div>
