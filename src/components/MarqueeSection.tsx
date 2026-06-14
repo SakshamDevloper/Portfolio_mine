@@ -1,6 +1,137 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { FadeIn } from './Reusable/FadeIn';
-import { ExternalLink, Code, BarChart3 } from 'lucide-react';
+import { ExternalLink, Code, BarChart3, Flame, CheckCircle, CalendarDays } from 'lucide-react';
+
+interface DayData {
+  day: number;
+  count: number;
+}
+
+const MONTHS = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+const DAYS = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+
+const LeetCodeCalendar: React.FC = () => {
+  const [calendar, setCalendar] = useState<DayData[]>([]);
+  const [streak, setStreak] = useState(0);
+  const [totalActive, setTotalActive] = useState(0);
+  const [loading, setLoading] = useState(true);
+
+  const now = new Date();
+  const year = now.getFullYear();
+  const month = now.getMonth();
+  const monthName = MONTHS[month];
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const res = await fetch('/api/leetcode', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            query: `query userProfileCalendar($username: String!, $year: Int) {
+              matchedUser(username: $username) {
+                userCalendar(year: $year) { streak totalActiveDays submissionCalendar }
+              }
+            }`,
+            variables: { username: 'SakshamDevloper', year }
+          })
+        });
+        const json = await res.json();
+        const cal = json.data?.matchedUser?.userCalendar;
+        if (!cal) { setLoading(false); return; }
+
+        setStreak(cal.streak || 0);
+        setTotalActive(cal.totalActiveDays || 0);
+
+        const raw: Record<string, number> = JSON.parse(cal.submissionCalendar || '{}');
+        const days: DayData[] = [];
+
+        const firstDay = new Date(year, month, 1);
+        const lastDay = new Date(year, month + 1, 0);
+
+        for (let d = new Date(firstDay); d <= lastDay; d.setDate(d.getDate() + 1)) {
+          const ts = Math.floor(d.getTime() / 1000);
+          const key = String(ts);
+          days.push({ day: d.getDate(), count: raw[key] || 0 });
+        }
+        setCalendar(days);
+      } catch {
+        // fallback
+      }
+      setLoading(false);
+    };
+    fetchData();
+  }, [year, month]);
+
+  const firstDayOfMonth = new Date(year, month, 1).getDay();
+  const maxCount = Math.max(...calendar.map(d => d.count), 1);
+
+  const getColor = (count: number) => {
+    if (count === 0) return 'bg-[#1a1a1a]';
+    const intensity = Math.min(count / maxCount, 1);
+    if (intensity > 0.66) return 'bg-[#B600A8]';
+    if (intensity > 0.33) return 'bg-[#7621B0]';
+    return 'bg-[#BE4C00]';
+  };
+
+  return (
+    <div className="flex-1 flex flex-col">
+      <div className="flex items-center gap-3 mb-5">
+        <CalendarDays className="w-5 h-5 text-[#BE4C00]" />
+        <span className="text-sm font-medium text-[#D7E2EA] uppercase tracking-wider">{monthName} {year}</span>
+      </div>
+
+      {loading ? (
+        <div className="flex-1 flex items-center justify-center text-[#D7E2EA]/40 text-sm">Loading...</div>
+      ) : (
+        <>
+          {/* Stats Row */}
+          <div className="flex gap-4 mb-5">
+            <div className="flex items-center gap-1.5 bg-[#D7E2EA]/5 rounded-lg px-3 py-2">
+              <Flame className="w-4 h-4 text-[#BE4C00]" />
+              <span className="text-xs text-[#D7E2EA]">{streak}<span className="text-[#D7E2EA]/50 ml-1">day streak</span></span>
+            </div>
+            <div className="flex items-center gap-1.5 bg-[#D7E2EA]/5 rounded-lg px-3 py-2">
+              <CheckCircle className="w-4 h-4 text-[#B600A8]" />
+              <span className="text-xs text-[#D7E2EA]">{totalActive}<span className="text-[#D7E2EA]/50 ml-1">active days</span></span>
+            </div>
+          </div>
+
+          {/* Calendar Grid */}
+          <div className="grid grid-cols-7 gap-1">
+            {DAYS.map(d => (
+              <div key={d} className="text-[10px] text-[#D7E2EA]/40 text-center uppercase tracking-wider font-medium mb-1">
+                {d[0]}
+              </div>
+            ))}
+            {Array.from({ length: firstDayOfMonth }).map((_, i) => (
+              <div key={`empty-${i}`} />
+            ))}
+            {calendar.map((d, i) => (
+              <div
+                key={i}
+                className={`aspect-square rounded-md flex items-center justify-center text-[11px] font-medium transition-colors duration-200 ${getColor(d.count)} ${d.count > 0 ? 'text-white' : 'text-[#D7E2EA]/30'}`}
+                title={`Day ${d.day}: ${d.count} submissions`}
+              >
+                {d.day}
+              </div>
+            ))}
+          </div>
+
+          {/* Legend */}
+          <div className="flex items-center gap-2 mt-4 justify-end">
+            <span className="text-[10px] text-[#D7E2EA]/40">Less</span>
+            <div className="w-3 h-3 rounded-sm bg-[#1a1a1a]" />
+            <div className="w-3 h-3 rounded-sm bg-[#BE4C00]" />
+            <div className="w-3 h-3 rounded-sm bg-[#7621B0]" />
+            <div className="w-3 h-3 rounded-sm bg-[#B600A8]" />
+            <span className="text-[10px] text-[#D7E2EA]/40">More</span>
+          </div>
+        </>
+      )}
+    </div>
+  );
+};
 
 export const MarqueeSection: React.FC = () => {
   return (
@@ -68,14 +199,7 @@ export const MarqueeSection: React.FC = () => {
                     </a>
                   </div>
                 </div>
-                <div className="flex-1 flex flex-col gap-4 items-center justify-center">
-                  <img
-                    src="https://leetcard.jacoblin.cool/SakshamDevloper?theme=dark&font=Kanit&ext=heatmap&width=450"
-                    alt="LeetCode Stats"
-                    className="w-full rounded-xl"
-                    loading="lazy"
-                  />
-                </div>
+                <LeetCodeCalendar />
               </div>
             </div>
           </FadeIn>
