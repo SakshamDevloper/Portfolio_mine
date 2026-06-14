@@ -52,10 +52,10 @@ function getGlowClass(count: number, maxCount: number): string {
   if (count === 0) return 'bg-[#1a1a1a] text-[#D7E2EA]/20';
   const intensity = Math.min(count / Math.max(maxCount, 1), 1);
   if (intensity > 0.66)
-    return 'bg-green-400 text-black shadow-[0_0_12px_rgba(74,222,128,0.8)] ring-2 ring-green-400/50';
+    return 'bg-green-400/20 text-green-300 shadow-[0_0_12px_rgba(74,222,128,0.8)] ring-2 ring-green-400/50';
   if (intensity > 0.33)
-    return 'bg-green-600 text-white shadow-[0_0_8px_rgba(74,222,128,0.5)]';
-  return 'bg-green-800 text-green-200 shadow-[0_0_4px_rgba(74,222,128,0.25)]';
+    return 'bg-green-600/20 text-green-400 shadow-[0_0_8px_rgba(74,222,128,0.5)]';
+  return 'bg-green-800/30 text-green-500 shadow-[0_0_4px_rgba(74,222,128,0.25)]';
 }
 
 export const LeetCodeCalendar: React.FC = () => {
@@ -234,9 +234,9 @@ export const LeetCodeCalendar: React.FC = () => {
         <div className="flex items-center gap-2 mt-4 justify-end">
           <span className="text-[9px] sm:text-[10px] text-[#D7E2EA]/40">Less</span>
           <div className="w-3 h-3 rounded-sm bg-[#1a1a1a]" />
-          <div className="w-3 h-3 rounded-sm bg-green-800 shadow-[0_0_4px_rgba(74,222,128,0.25)]" />
-          <div className="w-3 h-3 rounded-sm bg-green-600 shadow-[0_0_6px_rgba(74,222,128,0.5)]" />
-          <div className="w-3 h-3 rounded-sm bg-green-400 shadow-[0_0_8px_rgba(74,222,128,0.7)] ring-1 ring-green-400/30" />
+          <div className="w-3 h-3 rounded-sm bg-green-800/30 shadow-[0_0_4px_rgba(74,222,128,0.25)] ring-1 ring-green-500/30" />
+          <div className="w-3 h-3 rounded-sm bg-green-600/20 shadow-[0_0_6px_rgba(74,222,128,0.5)] ring-1 ring-green-400/30" />
+          <div className="w-3 h-3 rounded-sm bg-green-400/20 shadow-[0_0_8px_rgba(74,222,128,0.7)] ring-2 ring-green-400/40" />
           <span className="text-[9px] sm:text-[10px] text-[#D7E2EA]/40">More</span>
         </div>
       )}
