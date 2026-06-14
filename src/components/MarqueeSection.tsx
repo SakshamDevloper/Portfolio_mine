@@ -16,6 +16,7 @@ const LeetCodeCalendar: React.FC = () => {
   const [totalActive, setTotalActive] = useState(0);
   const [lastActiveDay, setLastActiveDay] = useState<string>('');
   const [submittedToday, setSubmittedToday] = useState(false);
+  const [last14Active, setLast14Active] = useState(0);
   const [loading, setLoading] = useState(true);
 
   const now = new Date();
@@ -68,6 +69,15 @@ const LeetCodeCalendar: React.FC = () => {
 
         const todayTs = Math.floor(now.getTime() / 1000);
         setSubmittedToday((raw[String(todayTs)] || 0) > 0);
+
+        let activeCount = 0;
+        for (let i = 0; i < 14; i++) {
+          const d = new Date(now);
+          d.setDate(d.getDate() - i);
+          const ts = Math.floor(d.getTime() / 1000);
+          if ((raw[String(ts)] || 0) > 0) activeCount++;
+        }
+        setLast14Active(activeCount);
       } catch {
         // fallback
       }
@@ -116,6 +126,10 @@ const LeetCodeCalendar: React.FC = () => {
               <span className={`text-xs ${submittedToday ? 'text-green-400' : 'text-[#D7E2EA]/30'}`}>
                 {submittedToday ? 'Solved today!' : 'Not yet today'}
               </span>
+            </div>
+            <div className="flex items-center gap-1.5 bg-green-500/10 rounded-lg px-3 py-2">
+              <Flame className="w-4 h-4 text-green-400" />
+              <span className="text-xs text-green-400">{last14Active}<span className="text-green-400/50 ml-1">/14 days active</span></span>
             </div>
           </div>
 
