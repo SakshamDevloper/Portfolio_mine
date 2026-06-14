@@ -206,6 +206,12 @@ export const MarqueeSection: React.FC = () => {
                     loading="lazy"
                   />
                   <img
+                    src="https://streak-stats.demolab.com/?user=SakshamDevloper&theme=dark&bg_color=0C0C0C&hide_border=true&stroke=2a2a2a&ring=B600A8&fire=BE4C00&currStreakNum=D7E2EA&sideNums=D7E2EA&currStreakLabel=D7E2EA&sideLabels=D7E2EA&dates=666666"
+                    alt="GitHub Streak"
+                    className="w-full rounded-xl"
+                    loading="lazy"
+                  />
+                  <img
                     src="https://github-readme-stats.vercel.app/api/top-langs/?username=SakshamDevloper&theme=dark&layout=compact&bg_color=0C0C0C&border_color=2a2a2a&text_color=D7E2EA&title_color=D7E2EA&hide_border=true"
                     alt="Top Languages"
                     className="w-full rounded-xl"
