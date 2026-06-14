@@ -5,22 +5,24 @@ import { ExternalLink, Code, BarChart3, Flame, CheckCircle, CalendarDays, Zap } 
 interface DayData {
   day: number;
   count: number;
-  date: Date;
 }
 
-const DAYS_SHORT = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+const MONTHS = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+const DAYS = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
 
 const LeetCodeCalendar: React.FC = () => {
-  const [last14, setLast14] = useState<DayData[]>([]);
+  const [calendar, setCalendar] = useState<DayData[]>([]);
   const [streak, setStreak] = useState(0);
   const [totalActive, setTotalActive] = useState(0);
   const [lastActiveDay, setLastActiveDay] = useState<string>('');
   const [submittedToday, setSubmittedToday] = useState(false);
-  const [totalSubmissions, setTotalSubmissions] = useState(0);
+  const [last14Active, setLast14Active] = useState(0);
   const [loading, setLoading] = useState(true);
 
   const now = new Date();
   const year = now.getFullYear();
+  const month = now.getMonth();
+  const monthName = MONTHS[month];
 
   useEffect(() => {
     const fetchData = async () => {
@@ -46,20 +48,19 @@ const LeetCodeCalendar: React.FC = () => {
 
         const raw: Record<string, number> = JSON.parse(cal.submissionCalendar || '{}');
         const days: DayData[] = [];
-        let lastTs = 0;
-        let total = 0;
 
-        for (let i = 13; i >= 0; i--) {
-          const d = new Date(now);
-          d.setDate(d.getDate() - i);
+        const firstDay = new Date(year, month, 1);
+        const lastDay = new Date(year, month + 1, 0);
+
+        let lastTs = 0;
+        for (let d = new Date(firstDay); d <= lastDay; d.setDate(d.getDate() + 1)) {
           const ts = Math.floor(d.getTime() / 1000);
-          const count = raw[String(ts)] || 0;
-          days.push({ day: d.getDate(), count, date: d });
-          total += count;
+          const key = String(ts);
+          const count = raw[key] || 0;
+          days.push({ day: d.getDate(), count });
           if (count > 0 && ts > lastTs) lastTs = ts;
         }
-        setLast14(days);
-        setTotalSubmissions(total);
+        setCalendar(days);
 
         if (lastTs > 0) {
           const d = new Date(lastTs * 1000);
@@ -68,15 +69,22 @@ const LeetCodeCalendar: React.FC = () => {
 
         const todayTs = Math.floor(now.getTime() / 1000);
         setSubmittedToday((raw[String(todayTs)] || 0) > 0);
+
+        let monthSubmissions = 0;
+        for (const d of days) {
+          monthSubmissions += d.count;
+        }
+        setLast14Active(monthSubmissions);
       } catch {
         // fallback
       }
       setLoading(false);
     };
     fetchData();
-  }, [year]);
+  }, [year, month]);
 
-  const maxCount = Math.max(...last14.map(d => d.count), 1);
+  const firstDayOfMonth = new Date(year, month, 1).getDay();
+  const maxCount = Math.max(...calendar.map(d => d.count), 1);
 
   const getColor = (count: number) => {
     if (count === 0) return 'bg-[#1a1a1a]';
@@ -90,7 +98,7 @@ const LeetCodeCalendar: React.FC = () => {
     <div className="flex-1 flex flex-col">
       <div className="flex items-center gap-3 mb-5">
         <CalendarDays className="w-5 h-5 text-[#BE4C00]" />
-        <span className="text-sm font-medium text-[#D7E2EA] uppercase tracking-wider">Last 14 Days</span>
+        <span className="text-sm font-medium text-[#D7E2EA] uppercase tracking-wider">{monthName} {year}</span>
       </div>
 
       {loading ? (
@@ -118,34 +126,27 @@ const LeetCodeCalendar: React.FC = () => {
             </div>
             <div className="flex items-center gap-1.5 bg-green-500/10 rounded-lg px-3 py-2">
               <Flame className="w-4 h-4 text-green-400" />
-              <span className="text-xs text-green-400">{totalSubmissions}<span className="text-green-400/50 ml-1">submissions (14d)</span></span>
+              <span className="text-xs text-green-400">{last14Active}<span className="text-green-400/50 ml-1">submissions this month</span></span>
             </div>
           </div>
 
-          {/* 14-Day Grid */}
+          {/* Calendar Grid */}
           <div className="grid grid-cols-7 gap-1">
-            {last14.slice(0, 7).map((d, i) => (
-              <div key={i} className="flex flex-col items-center gap-1">
-                <span className="text-[10px] text-[#D7E2EA]/40 uppercase tracking-wider">{DAYS_SHORT[d.date.getDay()]}</span>
-                <div
-                  className={`w-full aspect-square rounded-md flex items-center justify-center text-[11px] font-medium transition-colors duration-200 ${getColor(d.count)} ${d.count > 0 ? 'text-white' : 'text-[#D7E2EA]/30'}`}
-                  title={`${d.date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}: ${d.count} submissions`}
-                >
-                  {d.day}
-                </div>
+            {DAYS.map(d => (
+              <div key={d} className="text-[10px] text-[#D7E2EA]/40 text-center uppercase tracking-wider font-medium mb-1">
+                {d[0]}
               </div>
             ))}
-          </div>
-          <div className="grid grid-cols-7 gap-1 mt-1">
-            {last14.slice(7, 14).map((d, i) => (
-              <div key={i} className="flex flex-col items-center gap-1">
-                <span className="text-[10px] text-[#D7E2EA]/40 uppercase tracking-wider">{DAYS_SHORT[d.date.getDay()]}</span>
-                <div
-                  className={`w-full aspect-square rounded-md flex items-center justify-center text-[11px] font-medium transition-colors duration-200 ${getColor(d.count)} ${d.count > 0 ? 'text-white' : 'text-[#D7E2EA]/30'}`}
-                  title={`${d.date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}: ${d.count} submissions`}
-                >
-                  {d.day}
-                </div>
+            {Array.from({ length: firstDayOfMonth }).map((_, i) => (
+              <div key={`empty-${i}`} />
+            ))}
+            {calendar.map((d, i) => (
+              <div
+                key={i}
+                className={`aspect-square rounded-md flex items-center justify-center text-[11px] font-medium transition-colors duration-200 ${getColor(d.count)} ${d.count > 0 ? 'text-white' : 'text-[#D7E2EA]/30'}`}
+                title={`Day ${d.day}: ${d.count} submissions`}
+              >
+                {d.day}
               </div>
             ))}
           </div>
