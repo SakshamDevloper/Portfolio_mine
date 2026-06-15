@@ -90,11 +90,11 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, index }) => {
         className="relative h-full bg-[#0C0C0C] border border-[#D7E2EA]/10 rounded-2xl overflow-hidden transition-all duration-500 group-hover:border-transparent group-hover:scale-[1.02]"
       >
         {/* Image */}
-        <div className="relative aspect-video overflow-hidden">
+        <div className="relative w-full h-52 sm:h-56 bg-[#D7E2EA]/5 flex items-center justify-center overflow-hidden">
           <img
             src={project.image}
             alt={project.name}
-            className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+            className="w-full h-full object-contain p-2 transition-transform duration-700 group-hover:scale-105"
             loading="lazy"
           />
           <div className="absolute inset-0 bg-gradient-to-t from-[#0C0C0C] via-[#0C0C0C]/40 to-transparent" />
