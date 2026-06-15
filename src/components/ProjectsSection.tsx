@@ -212,6 +212,16 @@ const ProjectModal: React.FC<ProjectModalProps> = ({ project, onClose }) => {
                 {project.description}
               </p>
 
+              <div className="relative w-full aspect-video rounded-2xl overflow-hidden mb-6 border border-[#D7E2EA]/10">
+                <img
+                  src={project.image}
+                  alt={project.name}
+                  className="w-full h-full object-cover"
+                  loading="lazy"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-[#0C0C0C] via-transparent to-transparent opacity-30 pointer-events-none" />
+              </div>
+
               <div className="mb-6">
                 <h4 className="text-xs uppercase tracking-widest text-[#D7E2EA]/40 font-semibold mb-3">Key Highlights</h4>
                 <div className="space-y-2">

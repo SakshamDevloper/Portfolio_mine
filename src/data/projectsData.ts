@@ -24,7 +24,7 @@ export const projectsData: Project[] = [
       'Optimized for real-time response streaming',
     ],
     tools: ['Python', 'LangChain', 'FAISS', 'OpenAI API', 'Streamlit', 'HuggingFace'],
-    image: '/rag_showcase.png',
+    image: '/project-1.jpg',
     liveUrl: 'https://github.com/SakshamDevloper/RAG-Powered-AI-Assistant',
   },
   {
@@ -40,7 +40,7 @@ export const projectsData: Project[] = [
       'Deployed on HuggingFace Spaces via Streamlit interface',
     ],
     tools: ['Python', 'PyTorch', 'OpenCV', 'MobileNetV2', 'Streamlit', 'HuggingFace'],
-    image: '/plant_disease_cv.png',
+    image: '/project-2.jpg',
     liveUrl: 'https://github.com/SakshamDevloper/Plant-Disease-Detection',
   },
   {
@@ -56,7 +56,7 @@ export const projectsData: Project[] = [
       'Applied on retail transaction datasets',
     ],
     tools: ['Python', 'Scikit-learn', 'Statsmodels', 'Pandas', 'Matplotlib'],
-    image: '/sales_forecast.png',
+    image: '/project-3.jpg',
     liveUrl: 'https://github.com/SakshamDevloper/Sales-Forecasting',
   },
 ];
