@@ -92,7 +92,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, index }) => {
         {/* Image */}
         <div className="relative h-48 sm:h-52 md:h-56 overflow-hidden">
           <img
-            src={project.col2Image}
+            src={project.image}
             alt={project.name}
             className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
             loading="lazy"

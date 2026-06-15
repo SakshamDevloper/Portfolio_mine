@@ -6,9 +6,7 @@ export interface Project {
   description: string;
   details: string[];
   tools: string[];
-  col1Image1: string;
-  col1Image2: string;
-  col2Image: string;
+  image: string;
   liveUrl: string;
 }
 
@@ -26,9 +24,7 @@ export const projectsData: Project[] = [
       'Optimized for real-time response streaming',
     ],
     tools: ['Python', 'LangChain', 'FAISS', 'OpenAI API', 'Streamlit', 'HuggingFace'],
-    col1Image1: '/code_visual.png',
-    col1Image2: '/server_rack.png',
-    col2Image: '/rag_showcase.png',
+    image: '/rag_showcase.png',
     liveUrl: 'https://github.com/SakshamDevloper/RAG-Powered-AI-Assistant',
   },
   {
@@ -44,9 +40,7 @@ export const projectsData: Project[] = [
       'Deployed on HuggingFace Spaces via Streamlit interface',
     ],
     tools: ['Python', 'PyTorch', 'OpenCV', 'MobileNetV2', 'Streamlit', 'HuggingFace'],
-    col1Image1: '/neural_net.png',
-    col1Image2: '/code_visual.png',
-    col2Image: '/plant_disease_cv.png',
+    image: '/plant_disease_cv.png',
     liveUrl: 'https://github.com/SakshamDevloper/Plant-Disease-Detection',
   },
   {
@@ -62,9 +56,7 @@ export const projectsData: Project[] = [
       'Applied on retail transaction datasets',
     ],
     tools: ['Python', 'Scikit-learn', 'Statsmodels', 'Pandas', 'Matplotlib'],
-    col1Image1: '/server_rack.png',
-    col1Image2: '/neural_net.png',
-    col2Image: '/sales_forecast.png',
+    image: '/sales_forecast.png',
     liveUrl: 'https://github.com/SakshamDevloper/Sales-Forecasting',
   },
 ];
