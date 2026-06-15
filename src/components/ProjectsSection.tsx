@@ -178,7 +178,7 @@ const ProjectModal: React.FC<ProjectModalProps> = ({ project, onClose }) => {
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.9, y: 40 }}
             transition={{ type: 'spring', damping: 25, stiffness: 200 }}
-            className="relative w-full max-w-2xl max-h-[85vh] overflow-y-auto bg-[#0C0C0C] border rounded-3xl shadow-2xl"
+            className="relative w-full max-w-2xl max-h-[85vh] bg-[#0C0C0C] border rounded-3xl shadow-2xl flex flex-col"
             style={{ borderColor: `${color}30` }}
           >
             <div
@@ -193,7 +193,7 @@ const ProjectModal: React.FC<ProjectModalProps> = ({ project, onClose }) => {
               <X className="w-4 h-4" />
             </button>
 
-            <div className="p-6 sm:p-8">
+            <div className="flex-1 overflow-y-auto p-6 sm:p-8">
               <div className="flex items-center gap-3 mb-4">
                 <span className="text-2xl font-black text-[#D7E2EA]/20 select-none">{project.num}</span>
                 <span
