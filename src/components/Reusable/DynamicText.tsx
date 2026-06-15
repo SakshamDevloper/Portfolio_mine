@@ -2,11 +2,11 @@ import React, { useState, useEffect } from 'react';
 
 const words = [
   'AI/ML Engineer',
+  'Data Engineer',
+  'Data Scientist',
+  'Business Analyst',
+  'Deep Learning',
   'GenAI Developer',
-  'LangChain Architect',
-  'RAG Specialist',
-  'Full-Stack Builder',
-  'Problem Solver',
 ];
 
 export const DynamicText: React.FC = () => {

@@ -9,6 +9,7 @@ interface FadeInProps {
   y?: number;
   as?: string;
   className?: string;
+  style?: React.CSSProperties;
 }
 
 export const FadeIn: React.FC<FadeInProps> = ({
@@ -19,6 +20,7 @@ export const FadeIn: React.FC<FadeInProps> = ({
   y = 30,
   as = 'div',
   className = '',
+  style,
 }) => {
   // Use motion.create for dynamic element tags
   const MotionComponent = useMemo(() => motion.create(as as any), [as]);
@@ -34,6 +36,7 @@ export const FadeIn: React.FC<FadeInProps> = ({
         ease: [0.25, 0.1, 0.25, 1],
       }}
       className={className}
+      style={style}
     >
       {children}
     </MotionComponent>

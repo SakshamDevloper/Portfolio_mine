@@ -7,8 +7,9 @@ import { ContactButton } from './Reusable/ContactButton';
 
 const skills = [
   'Python', 'PyTorch', 'TensorFlow', 'LangChain', 'LangGraph',
-  'FastAPI', 'Docker', 'AWS', 'RAG', 'LoRA', 'ChromaDB', 'Scikit-learn',
-  'HuggingFace', 'Git', 'PostgreSQL', 'Redis',
+  'FastAPI', 'Docker', 'RAG', 'LoRA/QLoRA', 'ChromaDB', 'Scikit-learn',
+  'HuggingFace', 'OpenCV', 'spaCy', 'NLTK', 'FAISS', 'Streamlit',
+  'Java', 'JavaScript', 'SQL', 'Spring Boot', 'MongoDB', 'Git',
 ];
 
 export const AboutSection: React.FC = () => {
@@ -103,7 +104,7 @@ export const AboutSection: React.FC = () => {
         {/* Animated Paragraph */}
         <div className="mb-8 sm:mb-10 max-w-[560px] mx-auto">
           <AnimatedText
-            text="With a strong foundation in computer engineering and machine learning, i specialize in GenAI, LangChain, and advanced RAG architectures. I truly enjoy designing autonomous multi-agent pipelines and building scalable systems that solve complex analytical challenges. Let's create the future of technology together!"
+            text="AI/ML Engineer with hands-on expertise in Python, Machine Learning, NLP, Computer Vision, and GenAI application development. Built and deployed production-grade projects including LLM-powered assistants, Computer Vision models, and Time-Series Forecasting pipelines. Proficient in LangChain, HuggingFace, RAG pipelines, and REST API development — seeking to build intelligent, scalable systems that drive real-world impact."
             className="text-[#D7E2EA] font-medium leading-relaxed select-none"
           />
         </div>
@@ -159,10 +160,10 @@ export const AboutSection: React.FC = () => {
             <div className="space-y-4">
               <div>
                 <h4 className="text-sm sm:text-base font-semibold text-[#D7E2EA]">
-                  B.E. in Information Technology
+                  B.E. in Information Technology (Lateral Entry)
                 </h4>
                 <p className="text-xs text-[#D7E2EA]/60 mt-1">
-                  Parul Institute of Engineering & Tech (Expected 2027)
+                  Parul Institute of Engineering & Tech — 2024–2027 (Expected)
                 </p>
               </div>
               <div className="border-t border-[#D7E2EA]/10 pt-3">
@@ -170,8 +171,9 @@ export const AboutSection: React.FC = () => {
                   Diploma in Information Technology
                 </h4>
                 <p className="text-xs text-[#D7E2EA]/60 mt-1">
-                  Completed with CGPA: 7.35
+                  Government Polytechnic College, Jammu — 2021–2024
                 </p>
+                <span className="inline-block mt-1.5 text-[10px] font-semibold text-green-400 bg-green-400/10 px-2 py-0.5 rounded-full">CGPA: 7.35/10</span>
               </div>
             </div>
           </div>
@@ -184,6 +186,7 @@ export const AboutSection: React.FC = () => {
               <li>• AWS ML Engineer Associate</li>
               <li>• Data Engineering Foundations</li>
               <li>• Graphs Camp — AlgoUniversity (2025)</li>
+              <li>• AI for Techies Certification (2025)</li>
               <li>• Computer Networks — NPTEL (2024)</li>
               <li>• CIIIT - Tata Technologies (2024)</li>
             </ul>

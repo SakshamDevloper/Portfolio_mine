@@ -4,15 +4,18 @@ interface LiveProjectButtonProps {
   label?: string;
   href?: string;
   className?: string;
+  onClick?: (e: React.MouseEvent) => void;
 }
 
 export const LiveProjectButton: React.FC<LiveProjectButtonProps> = ({
   label = 'Live Project',
   href = '#',
   className = '',
+  onClick,
 }) => {
   return (
     <a
+      onClick={onClick}
       href={href}
       target="_blank"
       rel="noopener noreferrer"

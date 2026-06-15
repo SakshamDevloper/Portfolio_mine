@@ -1,8 +1,9 @@
-import React, { useRef } from 'react';
-import { motion, useScroll, useTransform, useMotionValue, useSpring } from 'framer-motion';
+import React, { useRef, useState } from 'react';
+import { motion, useScroll, useTransform, useMotionValue, useSpring, AnimatePresence } from 'framer-motion';
 import { projectsData } from '../data/projectsData';
 import type { Project } from '../data/projectsData';
 import { LiveProjectButton } from './Reusable/LiveProjectButton';
+import { X, ExternalLink, ChevronRight } from 'lucide-react';
 
 const GLOW_COLORS = ['#38BDF8', '#FB923C', '#EC4899'];
 
@@ -31,6 +32,8 @@ if (typeof document !== 'undefined' && !document.getElementById(stylesId)) {
 }
 
 export const ProjectsSection: React.FC = () => {
+  const [selectedProject, setSelectedProject] = useState<Project | null>(null);
+
   return (
     <section
       id="projects"
@@ -51,10 +54,13 @@ export const ProjectsSection: React.FC = () => {
               project={project}
               index={index}
               totalCards={projectsData.length}
+              onSelect={() => setSelectedProject(project)}
             />
           ))}
         </div>
       </div>
+
+      <ProjectModal project={selectedProject} onClose={() => setSelectedProject(null)} />
     </section>
   );
 };
@@ -63,9 +69,10 @@ interface ProjectCardProps {
   project: Project;
   index: number;
   totalCards: number;
+  onSelect: () => void;
 }
 
-const ProjectCard: React.FC<ProjectCardProps> = ({ project, index, totalCards }) => {
+const ProjectCard: React.FC<ProjectCardProps> = ({ project, index, totalCards, onSelect }) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const cardRef = useRef<HTMLDivElement>(null);
   const color = GLOW_COLORS[index];
@@ -114,9 +121,9 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, index, totalCards })
         }}
         onMouseMove={handleMouseMove}
         onMouseLeave={handleMouseLeave}
-        className="sticky w-full rounded-[40px] sm:rounded-[50px] md:rounded-[60px] bg-[#0C0C0C] p-4 sm:p-6 md:p-8 flex flex-col justify-between overflow-hidden shadow-2xl"
+        onClick={onSelect}
+        className="sticky w-full rounded-[40px] sm:rounded-[50px] md:rounded-[60px] bg-[#0C0C0C] p-4 sm:p-6 md:p-8 flex flex-col justify-between overflow-hidden shadow-2xl cursor-pointer"
       >
-        {/* Static edge glow — light leaking from borders toward center */}
         <div
           className="absolute inset-0 rounded-[40px] sm:rounded-[50px] md:rounded-[60px] pointer-events-none z-0"
           style={{
@@ -125,7 +132,6 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, index, totalCards })
           }}
         />
 
-        {/* Orbiting border glow ring */}
         <div
           className="absolute -inset-[2px] rounded-[40px] sm:rounded-[50px] md:rounded-[60px] pointer-events-none z-[1] overflow-hidden"
           style={{
@@ -140,7 +146,6 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, index, totalCards })
           }}
         />
 
-        {/* Trailing glow — second delayed orbit for reflection trail */}
         <div
           className="absolute -inset-[2px] rounded-[40px] sm:rounded-[50px] md:rounded-[60px] pointer-events-none z-[1] overflow-hidden"
           style={{
@@ -156,7 +161,6 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, index, totalCards })
           }}
         />
 
-        {/* Glass reflection highlight */}
         <div
           className="absolute inset-0 rounded-[40px] sm:rounded-[50px] md:rounded-[60px] pointer-events-none z-[2]"
           style={{
@@ -165,9 +169,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, index, totalCards })
           }}
         />
 
-        {/* Content layer */}
         <div className="relative z-[3] flex flex-col justify-between w-full h-full">
-          {/* Top Row: Number, Details, Live Button */}
           <div className="flex justify-between items-center w-full mb-6 sm:mb-8 md:mb-10">
             <div className="flex items-center">
               <div
@@ -186,10 +188,14 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, index, totalCards })
               </div>
             </div>
 
-            <LiveProjectButton href={project.liveUrl} />
+            <div className="flex items-center gap-3">
+              <span className="hidden sm:flex text-xs text-[#D7E2EA]/40 items-center gap-1">
+                Click for details <ChevronRight className="w-3 h-3" />
+              </span>
+              <LiveProjectButton href={project.liveUrl} onClick={(e) => e.stopPropagation()} />
+            </div>
           </div>
 
-          {/* Bottom Row: Two-Column Image Grid */}
           <div className="flex gap-3 sm:gap-4 md:gap-5 w-full flex-grow items-stretch">
             <div className="w-[40%] flex flex-col gap-3 sm:gap-4 md:gap-5">
               <div
@@ -228,5 +234,131 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, index, totalCards })
         </div>
       </motion.div>
     </div>
+  );
+};
+
+interface ProjectModalProps {
+  project: Project | null;
+  onClose: () => void;
+}
+
+const ProjectModal: React.FC<ProjectModalProps> = ({ project, onClose }) => {
+  if (!project) return null;
+
+  const color = GLOW_COLORS[projectsData.findIndex(p => p.id === project.id)] || '#38BDF8';
+
+  return (
+    <AnimatePresence>
+      {project && (
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          className="fixed inset-0 z-[100] flex items-center justify-center p-4 sm:p-6"
+        >
+          <div className="absolute inset-0 bg-black/80 backdrop-blur-md" onClick={onClose} />
+
+          <motion.div
+            initial={{ opacity: 0, scale: 0.9, y: 40 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            exit={{ opacity: 0, scale: 0.9, y: 40 }}
+            transition={{ type: 'spring', damping: 25, stiffness: 200 }}
+            className="relative w-full max-w-2xl max-h-[85vh] overflow-y-auto bg-[#0C0C0C] border rounded-3xl shadow-2xl"
+            style={{ borderColor: `${color}30` }}
+          >
+            {/* Glow header */}
+            <div
+              className="absolute top-0 left-0 right-0 h-1"
+              style={{ background: `linear-gradient(90deg, ${color}, ${color}88, transparent)` }}
+            />
+
+            {/* Close button */}
+            <button
+              onClick={onClose}
+              className="absolute top-4 right-4 z-10 p-2 rounded-xl bg-[#D7E2EA]/5 hover:bg-[#D7E2EA]/10 text-[#D7E2EA]/50 hover:text-[#D7E2EA] transition-all"
+            >
+              <X className="w-4 h-4" />
+            </button>
+
+            <div className="p-6 sm:p-8">
+              {/* Number + Category */}
+              <div className="flex items-center gap-3 mb-4">
+                <span className="text-2xl font-black text-[#D7E2EA]/20 select-none">{project.num}</span>
+                <span className="text-[10px] uppercase tracking-widest px-2.5 py-1 rounded-full border"
+                  style={{ borderColor: `${color}30`, color, background: `${color}08` }}
+                >
+                  {project.category}
+                </span>
+              </div>
+
+              {/* Title */}
+              <h2 className="text-xl sm:text-2xl md:text-3xl font-bold text-[#D7E2EA] mb-4">
+                {project.name}
+              </h2>
+
+              {/* Description */}
+              <p className="text-sm text-[#D7E2EA]/70 leading-relaxed mb-6">
+                {project.description}
+              </p>
+
+              {/* Details */}
+              <div className="mb-6">
+                <h4 className="text-xs uppercase tracking-widest text-[#D7E2EA]/40 font-semibold mb-3">Key Highlights</h4>
+                <div className="space-y-2">
+                  {project.details.map((detail, i) => (
+                    <motion.div
+                      key={i}
+                      initial={{ opacity: 0, x: -10 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      transition={{ delay: i * 0.08 }}
+                      className="flex items-start gap-2.5"
+                    >
+                      <div className="w-1.5 h-1.5 rounded-full mt-1.5 flex-shrink-0" style={{ background: color }} />
+                      <span className="text-xs sm:text-sm text-[#D7E2EA]/80">{detail}</span>
+                    </motion.div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Tools */}
+              <div className="mb-6">
+                <h4 className="text-xs uppercase tracking-widest text-[#D7E2EA]/40 font-semibold mb-3">Tools & Technologies</h4>
+                <div className="flex flex-wrap gap-2">
+                  {project.tools.map((tool, i) => (
+                    <motion.span
+                      key={tool}
+                      initial={{ opacity: 0, y: 8 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: i * 0.05 }}
+                      className="px-3 py-1.5 text-[11px] font-medium uppercase tracking-wider rounded-full border"
+                      style={{ borderColor: `${color}25`, color: `${color}cc`, background: `${color}08` }}
+                    >
+                      {tool}
+                    </motion.span>
+                  ))}
+                </div>
+              </div>
+
+              {/* Live link */}
+              <motion.a
+                href={project.liveUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-medium transition-all duration-300 hover:scale-105"
+                style={{
+                  background: `linear-gradient(135deg, ${color}, ${color}88)`,
+                  color: '#fff',
+                  boxShadow: `0 0 20px ${color}30`,
+                }}
+                whileHover={{ boxShadow: `0 0 30px ${color}50` }}
+              >
+                <ExternalLink className="w-4 h-4" />
+                View Live Project
+              </motion.a>
+            </div>
+          </motion.div>
+        </motion.div>
+      )}
+    </AnimatePresence>
   );
 };
