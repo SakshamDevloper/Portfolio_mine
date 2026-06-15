@@ -32,7 +32,7 @@ export const ResumeModal: React.FC<ResumeModalProps> = ({ isOpen, onClose }) => 
         className="absolute inset-0 bg-black/80 backdrop-blur-md"
         onClick={onClose}
       />
-      <div className="relative w-full max-w-3xl max-h-[85vh] bg-[#0C0C0C] border border-[#D7E2EA]/15 rounded-3xl overflow-hidden shadow-2xl shadow-[#B600A8]/10">
+      <div className="relative w-full max-w-3xl max-h-[85vh] bg-[#0C0C0C] border border-[#D7E2EA]/15 rounded-3xl shadow-2xl shadow-[#B600A8]/10 flex flex-col">
         <div className="sticky top-0 bg-[#0C0C0C]/95 backdrop-blur-sm border-b border-[#D7E2EA]/10 px-6 py-4 flex items-center justify-between z-10">
           <div className="flex items-center gap-3">
             <FileText className="w-5 h-5 text-[#B600A8]" />

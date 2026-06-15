@@ -212,14 +212,13 @@ const ProjectModal: React.FC<ProjectModalProps> = ({ project, onClose }) => {
                 {project.description}
               </p>
 
-              <div className="relative w-full aspect-video rounded-2xl overflow-hidden mb-6 border border-[#D7E2EA]/10">
+              <div className="relative w-full rounded-2xl overflow-hidden mb-6 border border-[#D7E2EA]/10 bg-[#D7E2EA]/5">
                 <img
                   src={project.image}
                   alt={project.name}
-                  className="w-full h-full object-cover"
+                  className="w-full h-auto max-h-[50vh] object-contain mx-auto"
                   loading="lazy"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-[#0C0C0C] via-transparent to-transparent opacity-30 pointer-events-none" />
               </div>
 
               <div className="mb-6">
@@ -258,7 +257,7 @@ const ProjectModal: React.FC<ProjectModalProps> = ({ project, onClose }) => {
                 </div>
               </div>
 
-              <motion.a
+              <a
                 href={project.liveUrl}
                 target="_blank"
                 rel="noopener noreferrer"
@@ -268,11 +267,12 @@ const ProjectModal: React.FC<ProjectModalProps> = ({ project, onClose }) => {
                   color: '#fff',
                   boxShadow: `0 0 20px ${color}30`,
                 }}
-                whileHover={{ boxShadow: `0 0 30px ${color}50` }}
+                onMouseEnter={(e) => { e.currentTarget.style.boxShadow = `0 0 30px ${color}50`; }}
+                onMouseLeave={(e) => { e.currentTarget.style.boxShadow = `0 0 20px ${color}30`; }}
               >
                 <ExternalLink className="w-4 h-4" />
                 View Live Project
-              </motion.a>
+              </a>
             </div>
           </motion.div>
         </motion.div>
