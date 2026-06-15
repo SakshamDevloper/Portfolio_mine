@@ -193,7 +193,7 @@ const ProjectModal: React.FC<ProjectModalProps> = ({ project, onClose }) => {
               <X className="w-4 h-4" />
             </button>
 
-            <div className="flex-1 overflow-y-auto p-6 sm:p-8">
+            <div className="flex-1 overflow-y-auto min-h-0 p-6 sm:p-8">
               <div className="flex items-center gap-3 mb-4">
                 <span className="text-2xl font-black text-[#D7E2EA]/20 select-none">{project.num}</span>
                 <span
