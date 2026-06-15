@@ -1,35 +1,28 @@
-import React, { useRef, useState } from 'react';
-import { motion, useScroll, useTransform, useMotionValue, useSpring, AnimatePresence } from 'framer-motion';
+import React, { useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import { projectsData } from '../data/projectsData';
 import type { Project } from '../data/projectsData';
-import { LiveProjectButton } from './Reusable/LiveProjectButton';
 import { X, ExternalLink, ChevronRight } from 'lucide-react';
+import { FadeIn } from './Reusable/FadeIn';
 
 const GLOW_COLORS = ['#38BDF8', '#FB923C', '#EC4899'];
 
-const stylesId = 'projects-glow-styles';
-const keyframes = `
-@keyframes orbit-spin {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
-}
-@keyframes glow-pulse {
-  0%, 100% { opacity: 0.5; transform: scale(1); }
-  50% { opacity: 0.8; transform: scale(1.02); }
-}
-@keyframes reflection-shimmer {
-  0% { opacity: 0.3; }
-  50% { opacity: 0.6; }
-  100% { opacity: 0.3; }
-}
-`;
+const containerVariants = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: { staggerChildren: 0.15 },
+  },
+};
 
-if (typeof document !== 'undefined' && !document.getElementById(stylesId)) {
-  const style = document.createElement('style');
-  style.id = stylesId;
-  style.textContent = keyframes;
-  document.head.appendChild(style);
-}
+const cardVariants = {
+  hidden: { opacity: 0, y: 30 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.5, ease: 'easeOut' as const },
+  },
+};
 
 export const ProjectsSection: React.FC = () => {
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
@@ -39,28 +32,37 @@ export const ProjectsSection: React.FC = () => {
       id="projects"
       className="relative bg-[#0C0C0C] rounded-t-[40px] sm:rounded-t-[50px] md:rounded-t-[60px] -mt-10 sm:-mt-12 md:-mt-14 z-10 px-5 sm:px-8 md:px-10 py-20 sm:py-24 md:py-32 w-full text-[#D7E2EA] overflow-hidden"
     >
-      <div className="max-w-5xl mx-auto flex flex-col items-center">
-        <h2
-          className="hero-heading font-black uppercase text-center mb-16 sm:mb-20 md:mb-28 select-none"
-          style={{ fontSize: 'clamp(3rem, 12vw, 160px)' }}
-        >
-          Projects
-        </h2>
-        <p className="text-sm sm:text-base text-[#D7E2EA]/50 -mt-10 sm:-mt-14 md:-mt-20 mb-16 sm:mb-20 md:mb-28 text-center max-w-xl">
-          Click on any project to explore the full story, tech stack, and live demo.
-        </p>
+      <div className="max-w-6xl mx-auto">
+        <FadeIn y={20} className="text-center mb-16 sm:mb-20">
+          <h2
+            className="hero-heading font-black uppercase select-none mb-4"
+            style={{ fontSize: 'clamp(2.5rem, 10vw, 120px)' }}
+          >
+            Projects
+          </h2>
+          <p className="text-sm sm:text-base text-[#D7E2EA]/50 max-w-lg mx-auto">
+            Real-world ML/AI systems I've built from scratch — click any card to explore the full story.
+          </p>
+        </FadeIn>
 
-        <div className="w-full flex flex-col gap-12 sm:gap-16 md:gap-20">
+        <motion.div
+          variants={containerVariants}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, margin: '-50px' }}
+          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6"
+        >
           {projectsData.map((project, index) => (
-            <ProjectCard
+            <motion.div
               key={project.id}
-              project={project}
-              index={index}
-              totalCards={projectsData.length}
-              onSelect={() => setSelectedProject(project)}
-            />
+              variants={cardVariants}
+              className="group cursor-pointer"
+              onClick={() => setSelectedProject(project)}
+            >
+              <ProjectCard project={project} index={index} />
+            </motion.div>
           ))}
-        </div>
+        </motion.div>
       </div>
 
       <ProjectModal project={selectedProject} onClose={() => setSelectedProject(null)} />
@@ -71,187 +73,69 @@ export const ProjectsSection: React.FC = () => {
 interface ProjectCardProps {
   project: Project;
   index: number;
-  totalCards: number;
-  onSelect: () => void;
 }
 
-const ProjectCard: React.FC<ProjectCardProps> = ({ project, index, totalCards, onSelect }) => {
-  const containerRef = useRef<HTMLDivElement>(null);
-  const cardRef = useRef<HTMLDivElement>(null);
+const ProjectCard: React.FC<ProjectCardProps> = ({ project, index }) => {
   const color = GLOW_COLORS[index];
 
-  const { scrollYProgress } = useScroll({
-    target: containerRef,
-    offset: ['start start', 'end start'],
-  });
-
-  const targetScale = 1 - (totalCards - 1 - index) * 0.03;
-  const scale = useTransform(scrollYProgress, [0, 1], [1, targetScale]);
-
-  const rotateX = useMotionValue(0);
-  const rotateY = useMotionValue(0);
-  const smoothRotateX = useSpring(rotateX, { damping: 15, stiffness: 150 });
-  const smoothRotateY = useSpring(rotateY, { damping: 15, stiffness: 150 });
-
-  const handleMouseMove = (e: React.MouseEvent) => {
-    if (!cardRef.current) return;
-    const rect = cardRef.current.getBoundingClientRect();
-    const x = (e.clientX - rect.left) / rect.width - 0.5;
-    const y = (e.clientY - rect.top) / rect.height - 0.5;
-    rotateX.set(-y * 6);
-    rotateY.set(x * 6);
-  };
-
-  const handleMouseLeave = () => {
-    rotateX.set(0);
-    rotateY.set(0);
-  };
-
   return (
-    <div
-      ref={containerRef}
-      className="relative w-full h-[85vh] flex justify-center items-start"
-    >
-      <motion.div
-        ref={cardRef}
-        style={{
-          scale,
-          top: `calc(${index * 28}px + 6rem)`,
-          rotateX: smoothRotateX,
-          rotateY: smoothRotateY,
-          transformStyle: 'preserve-3d',
-          willChange: 'transform',
-        }}
-        onMouseMove={handleMouseMove}
-        onMouseLeave={handleMouseLeave}
-        onClick={onSelect}
-        className="sticky w-full rounded-[40px] sm:rounded-[50px] md:rounded-[60px] bg-[#0C0C0C] p-4 sm:p-6 md:p-8 flex flex-col justify-between overflow-hidden shadow-2xl cursor-pointer"
+    <div className="relative h-full">
+      {/* Glow border on hover */}
+      <div
+        className="absolute -inset-[1px] rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 blur-sm"
+        style={{ background: `linear-gradient(135deg, ${color}, ${color}00, ${color}88)` }}
+      />
+
+      <div
+        className="relative h-full bg-[#0C0C0C] border border-[#D7E2EA]/10 rounded-2xl overflow-hidden transition-all duration-500 group-hover:border-transparent group-hover:scale-[1.02]"
       >
-        <div
-          className="absolute inset-0 rounded-[40px] sm:rounded-[50px] md:rounded-[60px] pointer-events-none z-0"
-          style={{
-            boxShadow: `inset 0 0 60px ${color}15, inset 0 0 120px ${color}08`,
-            animation: 'glow-pulse 5s ease-in-out infinite',
-          }}
-        />
+        {/* Image */}
+        <div className="relative h-48 sm:h-52 md:h-56 overflow-hidden">
+          <img
+            src={project.col2Image}
+            alt={project.name}
+            className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+            loading="lazy"
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-[#0C0C0C] via-[#0C0C0C]/40 to-transparent" />
 
-        <div
-          className="absolute -inset-[2px] rounded-[40px] sm:rounded-[50px] md:rounded-[60px] pointer-events-none z-[1] overflow-hidden"
-          style={{
-            background: `conic-gradient(from 0deg, transparent, transparent 280deg, ${color} 310deg, ${color}ee 325deg, ${color}60 340deg, transparent 360deg)`,
-            animation: 'orbit-spin 4s linear infinite',
-            willChange: 'transform',
-            WebkitMask: `linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)`,
-            WebkitMaskComposite: 'xor',
-            maskComposite: 'exclude',
-            padding: '2px',
-            filter: 'blur(1.5px)',
-          }}
-        />
-
-        <div
-          className="absolute -inset-[2px] rounded-[40px] sm:rounded-[50px] md:rounded-[60px] pointer-events-none z-[1] overflow-hidden"
-          style={{
-            background: `conic-gradient(from 0deg, transparent, transparent 290deg, ${color}40 320deg, ${color}20 335deg, transparent 360deg)`,
-            animation: 'orbit-spin 4s linear infinite',
-            animationDelay: '-0.6s',
-            willChange: 'transform',
-            WebkitMask: `linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)`,
-            WebkitMaskComposite: 'xor',
-            maskComposite: 'exclude',
-            padding: '2px',
-            filter: 'blur(4px)',
-          }}
-        />
-
-        <div
-          className="absolute inset-0 rounded-[40px] sm:rounded-[50px] md:rounded-[60px] pointer-events-none z-[2]"
-          style={{
-            background: `linear-gradient(135deg, ${color}08 0%, transparent 40%, transparent 60%, ${color}04 100%)`,
-            animation: 'reflection-shimmer 6s ease-in-out infinite',
-          }}
-        />
-
-        <div className="relative z-[3] flex flex-col justify-between w-full h-full">
-          <div className="flex justify-between items-center w-full mb-6 sm:mb-8 md:mb-10">
-            <div className="flex items-center">
-              <div
-                className="font-black text-[#D7E2EA] select-none leading-none mr-4 md:mr-6"
-                style={{ fontSize: 'clamp(2.5rem, 8vw, 100px)' }}
-              >
-                {project.num}
-              </div>
-              <div className="flex flex-col text-left">
-                <span className="text-xs md:text-sm uppercase tracking-widest text-[#D7E2EA] opacity-60 font-light mb-1 select-none">
-                  {project.category}
-                </span>
-                <h3 className="text-lg sm:text-xl md:text-2xl lg:text-3xl font-medium text-[#D7E2EA] uppercase select-none leading-tight">
-                  {project.name}
-                </h3>
-              </div>
-            </div>
-
-            <div className="flex items-center gap-3">
-              <span className="hidden sm:flex text-xs text-[#D7E2EA]/40 items-center gap-1">
-                Click for details <ChevronRight className="w-3 h-3" />
-              </span>
-              <LiveProjectButton href={project.liveUrl} onClick={(e) => e.stopPropagation()} />
-            </div>
+          {/* Number badge */}
+          <div
+            className="absolute top-3 left-3 w-10 h-10 rounded-xl flex items-center justify-center text-sm font-black select-none"
+            style={{ background: `${color}20`, color }}
+          >
+            {project.num}
           </div>
 
-          <div className="flex gap-3 sm:gap-4 md:gap-5 w-full flex-grow items-stretch">
-            <div className="w-[40%] flex flex-col gap-3 sm:gap-4 md:gap-5">
-              <div
-                className="w-full rounded-[40px] sm:rounded-[50px] md:rounded-[60px] overflow-hidden flex-shrink-0 group relative"
-                style={{ height: 'clamp(130px, 16vw, 230px)' }}
-              >
-                <img
-                  src={project.col1Image1}
-                  alt={`${project.name} preview 1`}
-                  className="w-full h-full object-cover rounded-[40px] sm:rounded-[50px] md:rounded-[60px] select-none transition-transform duration-700 group-hover:scale-110"
-                  loading="lazy"
-                />
-                <div className="absolute inset-0 rounded-[40px] sm:rounded-[50px] md:rounded-[60px] bg-gradient-to-t from-[#0C0C0C] via-transparent to-transparent opacity-60 pointer-events-none" />
-                <div className="absolute inset-0 rounded-[40px] sm:rounded-[50px] md:rounded-[60px] ring-1 ring-inset ring-white/5 pointer-events-none" />
-              </div>
-              <div
-                className="w-full rounded-[40px] sm:rounded-[50px] md:rounded-[60px] overflow-hidden flex-grow group relative"
-                style={{ height: 'clamp(160px, 22vw, 340px)' }}
-              >
-                <img
-                  src={project.col1Image2}
-                  alt={`${project.name} preview 2`}
-                  className="w-full h-full object-cover rounded-[40px] sm:rounded-[50px] md:rounded-[60px] select-none transition-transform duration-700 group-hover:scale-110"
-                  loading="lazy"
-                />
-                <div className="absolute inset-0 rounded-[40px] sm:rounded-[50px] md:rounded-[60px] bg-gradient-to-t from-[#0C0C0C] via-transparent to-transparent opacity-60 pointer-events-none" />
-                <div className="absolute inset-0 rounded-[40px] sm:rounded-[50px] md:rounded-[60px] ring-1 ring-inset ring-white/5 pointer-events-none" />
-              </div>
-            </div>
-
-            <div className="w-[60%] rounded-[40px] sm:rounded-[50px] md:rounded-[60px] overflow-hidden flex-grow group relative">
-              <img
-                src={project.col2Image}
-                alt={`${project.name} showcase`}
-                className="w-full h-full object-cover rounded-[40px] sm:rounded-[50px] md:rounded-[60px] select-none transition-transform duration-700 group-hover:scale-110"
-                loading="lazy"
-              />
-              <div className="absolute inset-0 rounded-[40px] sm:rounded-[50px] md:rounded-[60px] bg-gradient-to-t from-[#0C0C0C] via-transparent to-transparent opacity-60 pointer-events-none" />
-              <div className="absolute inset-0 rounded-[40px] sm:rounded-[50px] md:rounded-[60px] ring-1 ring-inset ring-white/5 pointer-events-none" />
-              <div
-                className="absolute bottom-3 left-3 z-10 text-[9px] font-bold uppercase tracking-widest px-2.5 py-1 rounded-full select-none"
-                style={{ background: `${color}dd`, color: '#0C0C0C' }}
-              >
-                {project.category}
-              </div>
-            </div>
+          {/* Category badge */}
+          <div
+            className="absolute bottom-3 left-3 text-[9px] font-bold uppercase tracking-widest px-2.5 py-1 rounded-full select-none"
+            style={{ background: `${color}dd`, color: '#0C0C0C' }}
+          >
+            {project.category}
           </div>
 
-          <div className="relative z-[3] mt-4 sm:mt-5 md:mt-6 flex items-center gap-2 flex-wrap">
-            {project.tools.slice(0, 4).map((tool) => (
+          {/* Hover arrow */}
+          <div className="absolute top-3 right-3 w-8 h-8 rounded-lg bg-[#0C0C0C]/80 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+            <ChevronRight className="w-4 h-4 text-[#D7E2EA]" />
+          </div>
+        </div>
+
+        {/* Content */}
+        <div className="p-4 sm:p-5">
+          <h3 className="text-base sm:text-lg font-semibold text-[#D7E2EA] mb-2 leading-tight group-hover:opacity-90 transition-opacity">
+            {project.name}
+          </h3>
+          <p className="text-xs sm:text-sm text-[#D7E2EA]/60 leading-relaxed line-clamp-2 mb-3">
+            {project.description}
+          </p>
+
+          {/* Tools */}
+          <div className="flex items-center gap-1.5 flex-wrap">
+            {project.tools.slice(0, 3).map((tool) => (
               <span
                 key={tool}
-                className="text-[10px] font-medium uppercase tracking-wider px-2.5 py-1 rounded-full border select-none"
+                className="text-[9px] font-medium uppercase tracking-wider px-2 py-0.5 rounded-full border select-none"
                 style={{
                   borderColor: `${color}20`,
                   color: `${color}bb`,
@@ -261,14 +145,9 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, index, totalCards, o
                 {tool}
               </span>
             ))}
-            {project.tools.length > 4 && (
-              <span className="text-[10px] text-[#D7E2EA]/40 font-medium px-2">
-                +{project.tools.length - 4}
-              </span>
-            )}
           </div>
         </div>
-      </motion.div>
+      </div>
     </div>
   );
 };
@@ -302,13 +181,11 @@ const ProjectModal: React.FC<ProjectModalProps> = ({ project, onClose }) => {
             className="relative w-full max-w-2xl max-h-[85vh] overflow-y-auto bg-[#0C0C0C] border rounded-3xl shadow-2xl"
             style={{ borderColor: `${color}30` }}
           >
-            {/* Glow header */}
             <div
               className="absolute top-0 left-0 right-0 h-1"
               style={{ background: `linear-gradient(90deg, ${color}, ${color}88, transparent)` }}
             />
 
-            {/* Close button */}
             <button
               onClick={onClose}
               className="absolute top-4 right-4 z-10 p-2 rounded-xl bg-[#D7E2EA]/5 hover:bg-[#D7E2EA]/10 text-[#D7E2EA]/50 hover:text-[#D7E2EA] transition-all"
@@ -317,27 +194,24 @@ const ProjectModal: React.FC<ProjectModalProps> = ({ project, onClose }) => {
             </button>
 
             <div className="p-6 sm:p-8">
-              {/* Number + Category */}
               <div className="flex items-center gap-3 mb-4">
                 <span className="text-2xl font-black text-[#D7E2EA]/20 select-none">{project.num}</span>
-                <span className="text-[10px] uppercase tracking-widest px-2.5 py-1 rounded-full border"
+                <span
+                  className="text-[10px] uppercase tracking-widest px-2.5 py-1 rounded-full border select-none"
                   style={{ borderColor: `${color}30`, color, background: `${color}08` }}
                 >
                   {project.category}
                 </span>
               </div>
 
-              {/* Title */}
               <h2 className="text-xl sm:text-2xl md:text-3xl font-bold text-[#D7E2EA] mb-4">
                 {project.name}
               </h2>
 
-              {/* Description */}
               <p className="text-sm text-[#D7E2EA]/70 leading-relaxed mb-6">
                 {project.description}
               </p>
 
-              {/* Details */}
               <div className="mb-6">
                 <h4 className="text-xs uppercase tracking-widest text-[#D7E2EA]/40 font-semibold mb-3">Key Highlights</h4>
                 <div className="space-y-2">
@@ -356,7 +230,6 @@ const ProjectModal: React.FC<ProjectModalProps> = ({ project, onClose }) => {
                 </div>
               </div>
 
-              {/* Tools */}
               <div className="mb-6">
                 <h4 className="text-xs uppercase tracking-widest text-[#D7E2EA]/40 font-semibold mb-3">Tools & Technologies</h4>
                 <div className="flex flex-wrap gap-2">
@@ -375,7 +248,6 @@ const ProjectModal: React.FC<ProjectModalProps> = ({ project, onClose }) => {
                 </div>
               </div>
 
-              {/* Live link */}
               <motion.a
                 href={project.liveUrl}
                 target="_blank"
