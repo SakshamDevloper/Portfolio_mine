@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Menu, X } from 'lucide-react';
+import { useLenisScroll } from './Reusable/LenisProvider';
 
 const navItems = [
   { label: 'About', href: '#about' },
@@ -13,6 +14,7 @@ export const Navbar: React.FC = () => {
   const [scrolled, setScrolled] = useState(false);
   const [activeSection, setActiveSection] = useState('');
   const [mobileOpen, setMobileOpen] = useState(false);
+  const { scrollTo } = useLenisScroll();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -47,8 +49,11 @@ export const Navbar: React.FC = () => {
   const handleNavClick = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
     e.preventDefault();
     setMobileOpen(false);
-    const el = document.querySelector(href);
-    if (el) el.scrollIntoView({ behavior: 'smooth' });
+    if (href === '#') {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    } else {
+      scrollTo(href);
+    }
   };
 
   return (
