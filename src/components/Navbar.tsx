@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Menu, X } from 'lucide-react';
+import { ThemeToggle } from './Reusable/ThemeToggle';
 
 const navItems = [
   { label: 'About', href: '#about' },
@@ -68,7 +69,7 @@ export const Navbar: React.FC = () => {
             SS<span className="text-[#B600A8]">.</span>
           </a>
 
-          <ul className="hidden md:flex items-center gap-12">
+          <ul className="hidden md:flex items-center gap-8 lg:gap-12">
             {navItems.map((item) => (
               <li key={item.label}>
                 <a
@@ -84,6 +85,9 @@ export const Navbar: React.FC = () => {
                 </a>
               </li>
             ))}
+            <li>
+              <ThemeToggle />
+            </li>
           </ul>
 
           <button

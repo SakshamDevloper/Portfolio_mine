@@ -1,34 +1,50 @@
+import { useState } from 'react';
 import { HeroSection } from './components/HeroSection';
 import { MarqueeSection } from './components/MarqueeSection';
 import { AboutSection } from './components/AboutSection';
 import { ServicesSection } from './components/ServicesSection';
 import { ProjectsSection } from './components/ProjectsSection';
+import { JourneySection } from './components/JourneySection';
+import { ShowcaseSection } from './components/ShowcaseSection';
 import { CursorFollower } from './components/Reusable/CursorFollower';
 import { ScrollProgress } from './components/Reusable/ScrollProgress';
 import { FloatingBackToTop } from './components/Reusable/FloatingBackToTop';
 import { FadeIn } from './components/Reusable/FadeIn';
-import { Mail, Phone, MapPin, Github, Linkedin } from 'lucide-react';
+import { ParticleBackground } from './components/Reusable/ParticleBackground';
+import { LenisProvider } from './components/Reusable/LenisProvider';
+import { ResumeModal } from './components/ResumeModal';
+import { useTheme } from './context/ThemeContext';
+import { Mail, Phone, MapPin, Github, Linkedin, FileText } from 'lucide-react';
 
-function App() {
+function AppContent() {
+  const [resumeOpen, setResumeOpen] = useState(false);
+  const { theme } = useTheme();
+  const isDark = theme === 'dark';
+
   return (
-    <div className="w-full bg-[#0C0C0C] text-[#D7E2EA] font-kanit overflow-x-clip flex flex-col min-h-screen relative">
+    <div className={`w-full font-kanit overflow-x-clip flex flex-col min-h-screen relative ${isDark ? 'bg-[#0C0C0C] text-[#D7E2EA]' : 'bg-[#FAFAFA] text-[#1A1A1A]'}`}>
+      <ParticleBackground />
       <CursorFollower />
       <ScrollProgress />
       <FloatingBackToTop />
 
-      <HeroSection />
-      <MarqueeSection />
-      <AboutSection />
-      <ServicesSection />
-      <ProjectsSection />
+      <div className="relative z-10">
+        <HeroSection />
+        <MarqueeSection />
+        <AboutSection />
+        <ShowcaseSection />
+        <ServicesSection />
+        <JourneySection />
+        <ProjectsSection />
+      </div>
 
       <footer
         id="contact"
-        className="w-full bg-[#0C0C0C] py-20 px-6 md:px-10 border-t border-[#D7E2EA]/10 flex flex-col items-center text-center relative z-20"
+        className={`w-full py-20 px-6 md:px-10 border-t flex flex-col items-center text-center relative z-20 ${isDark ? 'bg-[#0C0C0C] border-[#D7E2EA]/10' : 'bg-[#FAFAFA] border-[#1A1A1A]/10'}`}
       >
         <div className="max-w-4xl mx-auto flex flex-col items-center w-full">
           <FadeIn delay={0.1} y={20}>
-            <span className="text-xs sm:text-sm uppercase tracking-widest text-[#D7E2EA]/60 font-light mb-4 block select-none">
+            <span className={`text-xs sm:text-sm uppercase tracking-widest font-light mb-4 block select-none ${isDark ? 'text-[#D7E2EA]/60' : 'text-[#1A1A1A]/60'}`}>
               Get in touch
             </span>
           </FadeIn>
@@ -42,17 +58,17 @@ function App() {
             </h2>
           </FadeIn>
 
-          <FadeIn delay={0.2} y={20} className="w-full max-w-3xl border border-[#D7E2EA]/15 rounded-3xl p-6 bg-[#0C0C0C]/50 backdrop-blur-sm mb-12 text-left">
+          <FadeIn delay={0.2} y={20} className={`w-full max-w-3xl border rounded-3xl p-6 backdrop-blur-sm mb-12 text-left ${isDark ? 'border-[#D7E2EA]/15 bg-[#0C0C0C]/50' : 'border-[#1A1A1A]/15 bg-white/50'}`}>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-12">
               <div>
-                <h3 className="text-xs uppercase tracking-widest text-[#D7E2EA]/60 font-bold mb-3 select-none">Recent Experience</h3>
-                <h4 className="text-sm sm:text-base font-semibold text-[#D7E2EA] uppercase">Software Development Intern</h4>
-                <p className="text-xs text-[#D7E2EA]/70 mt-1">Cognifyz Technologies (Feb – Mar 2026, Remote)</p>
+                <h3 className={`text-xs uppercase tracking-widest font-bold mb-3 select-none ${isDark ? 'text-[#D7E2EA]/60' : 'text-[#1A1A1A]/60'}`}>Recent Experience</h3>
+                <h4 className={`text-sm sm:text-base font-semibold uppercase ${isDark ? 'text-[#D7E2EA]' : 'text-[#1A1A1A]'}`}>Software Development Intern</h4>
+                <p className={`text-xs mt-1 ${isDark ? 'text-[#D7E2EA]/70' : 'text-[#1A1A1A]/70'}`}>Cognifyz Technologies (Feb – Mar 2026, Remote)</p>
               </div>
               <div>
-                <h3 className="text-xs uppercase tracking-widest text-[#D7E2EA]/60 font-bold mb-3 select-none">Currently Building</h3>
-                <h4 className="text-sm sm:text-base font-semibold text-[#D7E2EA] uppercase">LangGraph Multi-Agent System</h4>
-                <p className="text-xs text-[#D7E2EA]/70 mt-1">Fine-tuning Mistral-7B (LoRA) for domain tasks</p>
+                <h3 className={`text-xs uppercase tracking-widest font-bold mb-3 select-none ${isDark ? 'text-[#D7E2EA]/60' : 'text-[#1A1A1A]/60'}`}>Currently Building</h3>
+                <h4 className={`text-sm sm:text-base font-semibold uppercase ${isDark ? 'text-[#D7E2EA]' : 'text-[#1A1A1A]'}`}>LangGraph Multi-Agent System</h4>
+                <p className={`text-xs mt-1 ${isDark ? 'text-[#D7E2EA]/70' : 'text-[#1A1A1A]/70'}`}>Fine-tuning Mistral-7B (LoRA) for domain tasks</p>
               </div>
             </div>
           </FadeIn>
@@ -60,7 +76,7 @@ function App() {
           <FadeIn delay={0.25} y={20} className="flex flex-col md:flex-row justify-center items-center gap-6 md:gap-12 mb-10 w-full text-sm sm:text-base">
             <a
               href="mailto:sakshamsethi353@gmail.com"
-              className="text-[#D7E2EA] font-medium hover:opacity-75 transition-opacity flex items-center gap-2 justify-center"
+              className={`font-medium hover:opacity-75 transition-opacity flex items-center gap-2 justify-center ${isDark ? 'text-[#D7E2EA]' : 'text-[#1A1A1A]'}`}
             >
               <Mail className="w-5 h-5 text-[#B600A8]" />
               sakshamsethi353@gmail.com
@@ -68,19 +84,19 @@ function App() {
 
             <a
               href="tel:+917889914194"
-              className="text-[#D7E2EA] font-medium hover:opacity-75 transition-opacity flex items-center gap-2 justify-center"
+              className={`font-medium hover:opacity-75 transition-opacity flex items-center gap-2 justify-center ${isDark ? 'text-[#D7E2EA]' : 'text-[#1A1A1A]'}`}
             >
               <Phone className="w-5 h-5 text-[#7621B0]" />
               +91-7889914194
             </a>
 
-            <div className="text-[#D7E2EA] font-medium flex items-center gap-2 justify-center select-none">
+            <div className={`font-medium flex items-center gap-2 justify-center select-none ${isDark ? 'text-[#D7E2EA]' : 'text-[#1A1A1A]'}`}>
               <MapPin className="w-5 h-5 text-[#BE4C00]" />
               Jammu, India (Open to BLR, HYD, Remote)
             </div>
           </FadeIn>
 
-          <FadeIn delay={0.3} y={20} className="flex gap-6 sm:gap-8 justify-center mb-12">
+          <FadeIn delay={0.3} y={20} className="flex gap-6 sm:gap-8 justify-center items-center mb-12 flex-wrap">
             {[
               { icon: <Linkedin className="w-5 h-5 sm:w-6 h-6" />, href: 'https://www.linkedin.com/in/SakshamDevloper' },
               { icon: <Github className="w-5 h-5 sm:w-6 h-6" />, href: 'https://github.com/SakshamDevloper' },
@@ -91,19 +107,35 @@ function App() {
                 href={social.href}
                 target="_blank"
                 rel="noreferrer"
-                className="w-12 h-12 rounded-full border border-[#D7E2EA]/20 flex items-center justify-center text-[#D7E2EA] transition-all hover:bg-[#D7E2EA] hover:text-[#0C0C0C] hover:scale-110 hover:shadow-[0_0_20px_rgba(215,226,234,0.15)]"
+                className={`w-12 h-12 rounded-full border flex items-center justify-center transition-all hover:scale-110 hover:shadow-[0_0_20px_rgba(215,226,234,0.15)] ${isDark ? 'border-[#D7E2EA]/20 text-[#D7E2EA] hover:bg-[#D7E2EA] hover:text-[#0C0C0C]' : 'border-[#1A1A1A]/20 text-[#1A1A1A] hover:bg-[#1A1A1A] hover:text-white'}`}
               >
                 {social.icon}
               </a>
             ))}
+            <button
+              onClick={() => setResumeOpen(true)}
+              className={`w-12 h-12 rounded-full border flex items-center justify-center transition-all hover:scale-110 hover:shadow-[0_0_20px_rgba(182,0,168,0.15)] ${isDark ? 'border-[#D7E2EA]/20 text-[#D7E2EA] hover:bg-[#D7E2EA] hover:text-[#0C0C0C]' : 'border-[#1A1A1A]/20 text-[#1A1A1A] hover:bg-[#1A1A1A] hover:text-white'}`}
+            >
+              <FileText className="w-5 h-5" />
+            </button>
           </FadeIn>
 
-          <FadeIn delay={0.4} y={10} className="mt-16 text-[10px] sm:text-xs uppercase tracking-widest text-[#D7E2EA]/40 select-none">
+          <FadeIn delay={0.4} y={10} className={`mt-16 text-[10px] sm:text-xs uppercase tracking-widest select-none ${isDark ? 'text-[#D7E2EA]/40' : 'text-[#1A1A1A]/40'}`}>
             © 2026 Saksham Sethi. All rights reserved.
           </FadeIn>
         </div>
       </footer>
+
+      <ResumeModal isOpen={resumeOpen} onClose={() => setResumeOpen(false)} />
     </div>
+  );
+}
+
+function App() {
+  return (
+    <LenisProvider>
+      <AppContent />
+    </LenisProvider>
   );
 }
 

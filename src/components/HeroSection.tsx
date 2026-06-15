@@ -3,6 +3,7 @@ import { Navbar } from './Navbar';
 import { Magnet } from './Reusable/Magnet';
 import { FadeIn } from './Reusable/FadeIn';
 import { ContactButton } from './Reusable/ContactButton';
+import { DynamicText } from './Reusable/DynamicText';
 import { Github, Linkedin } from 'lucide-react';
 
 export const HeroSection: React.FC = () => {
@@ -45,14 +46,14 @@ export const HeroSection: React.FC = () => {
       <div className="w-full flex justify-between items-end pb-7 sm:pb-8 md:pb-10 px-6 md:px-10 z-20">
         <FadeIn delay={0.35} y={20}>
           <p
-            className="text-[#D7E2EA] font-light uppercase tracking-wide leading-snug text-left select-none max-w-[160px] sm:max-w-[220px] md:max-w-[280px]"
+            className="text-[#D7E2EA] font-light uppercase tracking-wide leading-snug text-left select-none max-w-[180px] sm:max-w-[240px] md:max-w-[320px]"
             style={{ fontSize: 'clamp(0.75rem, 1.4vw, 1.5rem)' }}
           >
-            an ai/ml engineer driven by building intelligent agents and core rag systems
+            <DynamicText />
           </p>
         </FadeIn>
 
-        <div className="flex items-center gap-3">
+          <div className="flex items-center gap-3 flex-wrap">
           <FadeIn delay={0.5} y={20}>
             <ContactButton
               onClick={() => {

@@ -14,10 +14,10 @@ const skills = [
 export const AboutSection: React.FC = () => {
   const { scrollY } = useScroll();
 
-  const moonY = useTransform(scrollY, [0, 2000], [0, -150]);
-  const legoY = useTransform(scrollY, [0, 2000], [0, 100]);
-  const bottomLeftY = useTransform(scrollY, [0, 2000], [0, 180]);
-  const bottomRightY = useTransform(scrollY, [0, 2000], [0, -120]);
+  const moonY = useTransform(scrollY, [0, 2000], [0, -60]);
+  const legoY = useTransform(scrollY, [0, 2000], [0, 40]);
+  const bottomLeftY = useTransform(scrollY, [0, 2000], [0, 70]);
+  const bottomRightY = useTransform(scrollY, [0, 2000], [0, -50]);
 
   return (
     <section
@@ -26,65 +26,65 @@ export const AboutSection: React.FC = () => {
     >
       {/* Top Left: Moon */}
       <motion.div
-        initial={{ opacity: 0, x: -80 }}
+        initial={{ opacity: 0, x: -60 }}
         whileInView={{ opacity: 1, x: 0 }}
         viewport={{ once: true }}
         transition={{ delay: 0.1, duration: 0.9, ease: [0.25, 0.1, 0.25, 1] }}
         style={{ y: moonY }}
-        className="absolute top-[4%] left-[3%] sm:left-[5%] md:left-[6%] z-10 w-[120px] sm:w-[160px] md:w-[210px]"
+        className="absolute top-[6%] left-[6%] z-10 w-[80px] sm:w-[100px] md:w-[120px] hidden sm:block"
       >
         <img
           src="https://shrug-person-78902957.figma.site/_components/v2/ebb2b8f25d8e24d5f0a5ca8af4c950de81aa2fd7/moon_icon.11395d36.png"
           alt="3D Moon Icon"
-          className="w-full h-auto object-contain select-none pointer-events-none opacity-40"
+          className="w-full h-auto object-contain select-none pointer-events-none opacity-15"
         />
       </motion.div>
 
       {/* Bottom Left: 3D Object */}
       <motion.div
-        initial={{ opacity: 0, x: -80 }}
+        initial={{ opacity: 0, x: -60 }}
         whileInView={{ opacity: 1, x: 0 }}
         viewport={{ once: true }}
         transition={{ delay: 0.25, duration: 0.9, ease: [0.25, 0.1, 0.25, 1] }}
         style={{ y: bottomLeftY }}
-        className="absolute bottom-[8%] left-[4%] sm:left-[7%] md:left-[11%] z-10 w-[100px] sm:w-[140px] md:w-[180px]"
+        className="absolute bottom-[8%] left-[8%] z-10 w-[70px] sm:w-[85px] md:w-[100px] hidden sm:block"
       >
         <img
           src="https://shrug-person-78902957.figma.site/_components/v2/ebb2b8f25d8e24d5f0a5ca8af4c950de81aa2fd7/p59_1.4659672e.png"
           alt="3D Object Icon"
-          className="w-full h-auto object-contain select-none pointer-events-none opacity-40"
+          className="w-full h-auto object-contain select-none pointer-events-none opacity-12"
         />
       </motion.div>
 
       {/* Top Right: Lego Icon */}
       <motion.div
-        initial={{ opacity: 0, x: 80 }}
+        initial={{ opacity: 0, x: 60 }}
         whileInView={{ opacity: 1, x: 0 }}
         viewport={{ once: true }}
         transition={{ delay: 0.15, duration: 0.9, ease: [0.25, 0.1, 0.25, 1] }}
         style={{ y: legoY }}
-        className="absolute top-[4%] right-[3%] sm:right-[5%] md:right-[6%] z-10 w-[120px] sm:w-[160px] md:w-[210px]"
+        className="absolute top-[6%] right-[6%] z-10 w-[80px] sm:w-[100px] md:w-[120px] hidden sm:block"
       >
         <img
           src="https://shrug-person-78902957.figma.site/_components/v2/ebb2b8f25d8e24d5f0a5ca8af4c950de81aa2fd7/lego_icon-1.703bb594.png"
           alt="3D Lego Icon"
-          className="w-full h-auto object-contain select-none pointer-events-none opacity-40"
+          className="w-full h-auto object-contain select-none pointer-events-none opacity-15"
         />
       </motion.div>
 
-      {/* Bottom Right: 3D Group */}
+      {/* Bottom Right: 3D Group (smile) */}
       <motion.div
-        initial={{ opacity: 0, x: 80 }}
+        initial={{ opacity: 0, x: 60 }}
         whileInView={{ opacity: 1, x: 0 }}
         viewport={{ once: true }}
         transition={{ delay: 0.3, duration: 0.9, ease: [0.25, 0.1, 0.25, 1] }}
         style={{ y: bottomRightY }}
-        className="absolute bottom-[8%] right-[4%] sm:right-[7%] md:right-[11%] z-10 w-[130px] sm:w-[170px] md:w-[220px]"
+        className="absolute bottom-[8%] right-[8%] z-10 w-[80px] sm:w-[100px] md:w-[120px] hidden sm:block"
       >
         <img
           src="https://shrug-person-78902957.figma.site/_components/v2/ebb2b8f25d8e24d5f0a5ca8af4c950de81aa2fd7/Group_134-1.2e04f3ce.png"
           alt="3D Group Icon"
-          className="w-full h-auto object-contain select-none pointer-events-none opacity-40"
+          className="w-full h-auto object-contain select-none pointer-events-none opacity-12"
         />
       </motion.div>
 
