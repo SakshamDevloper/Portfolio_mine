@@ -44,8 +44,11 @@ export const ProjectsSection: React.FC = () => {
           className="hero-heading font-black uppercase text-center mb-16 sm:mb-20 md:mb-28 select-none"
           style={{ fontSize: 'clamp(3rem, 12vw, 160px)' }}
         >
-          Project
+          Projects
         </h2>
+        <p className="text-sm sm:text-base text-[#D7E2EA]/50 -mt-10 sm:-mt-14 md:-mt-20 mb-16 sm:mb-20 md:mb-28 text-center max-w-xl">
+          Click on any project to explore the full story, tech stack, and live demo.
+        </p>
 
         <div className="w-full flex flex-col gap-12 sm:gap-16 md:gap-20">
           {projectsData.map((project, index) => (
@@ -199,37 +202,70 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, index, totalCards, o
           <div className="flex gap-3 sm:gap-4 md:gap-5 w-full flex-grow items-stretch">
             <div className="w-[40%] flex flex-col gap-3 sm:gap-4 md:gap-5">
               <div
-                className="w-full rounded-[40px] sm:rounded-[50px] md:rounded-[60px] overflow-hidden flex-shrink-0 group"
+                className="w-full rounded-[40px] sm:rounded-[50px] md:rounded-[60px] overflow-hidden flex-shrink-0 group relative"
                 style={{ height: 'clamp(130px, 16vw, 230px)' }}
               >
                 <img
                   src={project.col1Image1}
                   alt={`${project.name} preview 1`}
-                  className="w-full h-full object-cover rounded-[40px] sm:rounded-[50px] md:rounded-[60px] select-none transition-transform duration-500 group-hover:scale-110"
+                  className="w-full h-full object-cover rounded-[40px] sm:rounded-[50px] md:rounded-[60px] select-none transition-transform duration-700 group-hover:scale-110"
                   loading="lazy"
                 />
+                <div className="absolute inset-0 rounded-[40px] sm:rounded-[50px] md:rounded-[60px] bg-gradient-to-t from-[#0C0C0C] via-transparent to-transparent opacity-60 pointer-events-none" />
+                <div className="absolute inset-0 rounded-[40px] sm:rounded-[50px] md:rounded-[60px] ring-1 ring-inset ring-white/5 pointer-events-none" />
               </div>
               <div
-                className="w-full rounded-[40px] sm:rounded-[50px] md:rounded-[60px] overflow-hidden flex-grow group"
+                className="w-full rounded-[40px] sm:rounded-[50px] md:rounded-[60px] overflow-hidden flex-grow group relative"
                 style={{ height: 'clamp(160px, 22vw, 340px)' }}
               >
                 <img
                   src={project.col1Image2}
                   alt={`${project.name} preview 2`}
-                  className="w-full h-full object-cover rounded-[40px] sm:rounded-[50px] md:rounded-[60px] select-none transition-transform duration-500 group-hover:scale-110"
+                  className="w-full h-full object-cover rounded-[40px] sm:rounded-[50px] md:rounded-[60px] select-none transition-transform duration-700 group-hover:scale-110"
                   loading="lazy"
                 />
+                <div className="absolute inset-0 rounded-[40px] sm:rounded-[50px] md:rounded-[60px] bg-gradient-to-t from-[#0C0C0C] via-transparent to-transparent opacity-60 pointer-events-none" />
+                <div className="absolute inset-0 rounded-[40px] sm:rounded-[50px] md:rounded-[60px] ring-1 ring-inset ring-white/5 pointer-events-none" />
               </div>
             </div>
 
-            <div className="w-[60%] rounded-[40px] sm:rounded-[50px] md:rounded-[60px] overflow-hidden flex-grow group">
+            <div className="w-[60%] rounded-[40px] sm:rounded-[50px] md:rounded-[60px] overflow-hidden flex-grow group relative">
               <img
                 src={project.col2Image}
                 alt={`${project.name} showcase`}
-                className="w-full h-full object-cover rounded-[40px] sm:rounded-[50px] md:rounded-[60px] select-none transition-transform duration-500 group-hover:scale-110"
+                className="w-full h-full object-cover rounded-[40px] sm:rounded-[50px] md:rounded-[60px] select-none transition-transform duration-700 group-hover:scale-110"
                 loading="lazy"
               />
+              <div className="absolute inset-0 rounded-[40px] sm:rounded-[50px] md:rounded-[60px] bg-gradient-to-t from-[#0C0C0C] via-transparent to-transparent opacity-60 pointer-events-none" />
+              <div className="absolute inset-0 rounded-[40px] sm:rounded-[50px] md:rounded-[60px] ring-1 ring-inset ring-white/5 pointer-events-none" />
+              <div
+                className="absolute bottom-3 left-3 z-10 text-[9px] font-bold uppercase tracking-widest px-2.5 py-1 rounded-full select-none"
+                style={{ background: `${color}dd`, color: '#0C0C0C' }}
+              >
+                {project.category}
+              </div>
             </div>
+          </div>
+
+          <div className="relative z-[3] mt-4 sm:mt-5 md:mt-6 flex items-center gap-2 flex-wrap">
+            {project.tools.slice(0, 4).map((tool) => (
+              <span
+                key={tool}
+                className="text-[10px] font-medium uppercase tracking-wider px-2.5 py-1 rounded-full border select-none"
+                style={{
+                  borderColor: `${color}20`,
+                  color: `${color}bb`,
+                  background: `${color}08`,
+                }}
+              >
+                {tool}
+              </span>
+            ))}
+            {project.tools.length > 4 && (
+              <span className="text-[10px] text-[#D7E2EA]/40 font-medium px-2">
+                +{project.tools.length - 4}
+              </span>
+            )}
           </div>
         </div>
       </motion.div>

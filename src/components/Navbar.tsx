@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { Menu, X } from 'lucide-react';
-import { ThemeToggle } from './Reusable/ThemeToggle';
 
 const navItems = [
   { label: 'About', href: '#about' },
@@ -85,9 +84,6 @@ export const Navbar: React.FC = () => {
                 </a>
               </li>
             ))}
-            <li>
-              <ThemeToggle />
-            </li>
           </ul>
 
           <button

@@ -1,5 +1,4 @@
 import React, { useEffect, useRef } from 'react';
-import { useTheme } from '../../context/ThemeContext';
 
 interface Particle {
   x: number;
@@ -16,8 +15,6 @@ export const ParticleBackground: React.FC = () => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const particlesRef = useRef<Particle[]>([]);
   const animFrameRef = useRef<number>(0);
-  const { theme } = useTheme();
-
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
@@ -32,9 +29,7 @@ export const ParticleBackground: React.FC = () => {
     resize();
     window.addEventListener('resize', resize);
 
-    const colors = theme === 'dark'
-      ? ['183, 0, 168', '118, 33, 176', '190, 76, 0', '215, 226, 234']
-      : ['183, 0, 168', '118, 33, 176', '190, 76, 0', '100, 100, 100'];
+    const colors = ['183, 0, 168', '118, 33, 176', '190, 76, 0', '215, 226, 234'];
 
     const spawnParticle = () => {
       return {
@@ -110,7 +105,7 @@ export const ParticleBackground: React.FC = () => {
       cancelAnimationFrame(animFrameRef.current);
       particlesRef.current = [];
     };
-  }, [theme]);
+  }, []);
 
   return (
     <canvas
