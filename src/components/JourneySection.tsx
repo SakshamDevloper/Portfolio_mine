@@ -374,7 +374,7 @@ const JourneyCard: React.FC<{
 /* ------------------------------------------------------------------ */
 export const JourneySection: React.FC = () => {
   return (
-    <section className="relative py-16 sm:py-20 md:py-24 overflow-hidden" style={{ background: 'var(--bg)' }}>
+    <section id="journey" className="relative py-16 sm:py-20 md:py-24 overflow-hidden" style={{ background: 'var(--bg)' }}>
       <BackgroundRings />
 
       {/* Grid overlay */}

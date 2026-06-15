@@ -82,6 +82,7 @@ export const ShowcaseSection: React.FC = () => {
 
   return (
     <section
+      id="expertise"
       ref={sectionRef}
       className="relative w-full bg-[#0C0C0C] overflow-hidden py-20 sm:py-28 md:py-32"
     >
