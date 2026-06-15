@@ -40,7 +40,7 @@ export const projectsData: Project[] = [
       'Deployed on HuggingFace Spaces via Streamlit interface',
     ],
     tools: ['Python', 'PyTorch', 'OpenCV', 'MobileNetV2', 'Streamlit', 'HuggingFace'],
-    image: '/project-2.jpg',
+    image: '/project-3.jpg',
     liveUrl: 'https://github.com/SakshamDevloper/Plant-Disease-Detection',
   },
   {
@@ -56,7 +56,7 @@ export const projectsData: Project[] = [
       'Applied on retail transaction datasets',
     ],
     tools: ['Python', 'Scikit-learn', 'Statsmodels', 'Pandas', 'Matplotlib'],
-    image: '/project-3.jpg',
+    image: '/project-2.jpg',
     liveUrl: 'https://github.com/SakshamDevloper/Sales-Forecasting',
   },
 ];
